@@ -1,0 +1,6 @@
+SDL2/
+cmake-build-debug/
+cmake/
+.idea/
+.code/
+CMakeLists.txt
