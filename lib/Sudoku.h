@@ -6,14 +6,13 @@
 #define PROJECT_NAME_SUDOKU_H
 
 #include "SDL.h"
-
+#include "Painter.h"
 
 class Sudoku {
-    SDL_Window *window{nullptr};
-    SDL_Renderer *renderer{nullptr};
+    bool quit{false};
 
-    int createWindow();
-    int createRenderer();
+    Painter* pPainter{nullptr};
+
     int loadTextures();
 
 public:

@@ -3,57 +3,56 @@
 //
 
 #include <iostream>
-#include "../lib/Sudoku.h"
-#include "../lib/ErrorMessages.h"
-#include "../lib/Constants.h"
+#include "Sudoku.h"
+#include "ErrorMessages.h"
+#include "Constants.h"
 #include "SDL.h"
 
 Sudoku::Sudoku() {
-    if(!SDL_Init(SDL_INIT_VIDEO)){
-        std::cerr<<ErrorMessages::SDL_INIT_ERROR;
-    } else if(!createWindow()) {
-        return;
-    } else if(!createRenderer()){
-        return;
-    } else if(!loadTextures()){
-
+    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
+        std::cerr<<ErrorMessages::SDL_INIT_ERROR << SDL_GetError() << std::endl;
     }
+    pPainter = new Painter();
+
+//    else if( || !loadTextures()) {
+//        return;
+//    }
+
+    mainLoop();
 
 }
 
 void Sudoku::mainLoop() {
+    while(!quit){
+        Uint64 start = SDL_GetPerformanceCounter();
+        SDL_Event event{};
+        while(SDL_PollEvent(&event)){
+            if(event.type == SDL_QUIT){
+                quit = true;
+            }
+        }
 
+        pPainter->paintMainMenu();
+
+        Uint64 end = SDL_GetPerformanceCounter();
+
+        float elapsed = (float)(end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+        if (elapsed < 16.666f) {
+            SDL_Delay(floor(16.666f - elapsed));
+        }
+    }
 }
 
 Sudoku::~Sudoku() {
-    // destroy renderer
-    SDL_DestroyRenderer(renderer);
-    renderer = nullptr;
-
-    // destroy window
-    SDL_DestroyWindow(window);
-    window = nullptr;
+    delete pPainter;
+    pPainter = nullptr;
 
     // quit SDL2
     SDL_Quit();
 }
 
-int Sudoku::createWindow() {
-    window = SDL_CreateWindow(
-         "Sudoku", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT, SDL_WINDOW_SHOWN
-         );
-    if (window == nullptr){
-        std::cerr<<ErrorMessages::WINDOW_INIT_ERROR;
-        return 0;
-    }
-    return 1;
-}
-
-int Sudoku::createRenderer() {
-    return 0;
-}
 
 int Sudoku::loadTextures() {
-    return 0;
+    return 1;
 }
 
