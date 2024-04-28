@@ -5,7 +5,7 @@
 #ifndef PROJECT_NAME_SUDOKU_H
 #define PROJECT_NAME_SUDOKU_H
 
-#include "SDL.h"
+#include <SDL.h>
 #include "Painter.h"
 
 class Sudoku {

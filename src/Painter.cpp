@@ -58,7 +58,7 @@ int Painter::createWindow() {
 }
 
 int Painter::createRenderer() {
-    pRenderer = SDL_CreateRenderer(pWindow, 0, SDL_RENDERER_ACCELERATED);
+    pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
     if (pRenderer == nullptr) {
         std::cerr << ErrorMessages::RENDERER_CREATE_ERROR << SDL_GetError() << std::endl;
         return 0;
@@ -69,6 +69,8 @@ int Painter::createRenderer() {
 void Painter::paintMainMenu() {
     SDL_SetRenderDrawColor(pRenderer, Constants::BACKGROUND_COLOR.r, Constants::BACKGROUND_COLOR.g,
                            Constants::BACKGROUND_COLOR.b, Constants::BACKGROUND_COLOR.a);
+
+    SDL_RenderClear(pRenderer);
 
     pMainMenu->paint();
 
@@ -85,3 +87,5 @@ bool Painter::loadFonts() {
 
     return true;
 }
+
+

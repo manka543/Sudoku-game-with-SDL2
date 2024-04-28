@@ -6,7 +6,7 @@
 #include "Sudoku.h"
 #include "ErrorMessages.h"
 #include "Constants.h"
-#include "SDL.h"
+#include <SDL.h>
 
 Sudoku::Sudoku() {
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -29,6 +29,8 @@ void Sudoku::mainLoop() {
         while(SDL_PollEvent(&event)){
             if(event.type == SDL_QUIT){
                 quit = true;
+            } else if (event.type == SDL_MOUSEMOTION){
+                pPainter->pMainMenu->setMousePosition(event.motion.x, event.motion.y);
             }
         }
 

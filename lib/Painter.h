@@ -5,7 +5,7 @@
 #ifndef SUDOKU_GAME_WITH_SDL2_PAINTER_H
 #define SUDOKU_GAME_WITH_SDL2_PAINTER_H
 
-#include "SDL.h"
+#include <SDL.h>
 
 #include "Constants.h"
 #include "MainMenu.h"
@@ -14,9 +14,6 @@
 
 
 class Painter {
-    MainMenu *pMainMenu;
-
-
 
     SDL_Window *pWindow{nullptr};
     SDL_Renderer *pRenderer{nullptr};
@@ -30,6 +27,8 @@ class Painter {
     bool loadFonts();
 
 public:
+    MainMenu *pMainMenu;
+
     Painter();
 
     ~Painter();
