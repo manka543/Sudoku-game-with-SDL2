@@ -16,19 +16,9 @@ Painter::Painter() {
         isSuccessfullyInitialized = false;
     }
 
-    if (isSuccessfullyInitialized) {
-        pMainMenu = new MainMenu(pRenderer, pFontMain64);
-        if (!pMainMenu->isSuccessfullyInitialized) {
-            isSuccessfullyInitialized = false;
-        }
-    }
-
 }
 
 Painter::~Painter() {
-    // free main menu
-    delete pMainMenu;
-
 
     // Close font
     TTF_CloseFont(pFontMain64);
@@ -75,6 +65,10 @@ void Painter::paintMainMenu() {
     pMainMenu->paint();
 
     SDL_RenderPresent(pRenderer);
+}
+
+void Painter::setMainMenu(MainMenu* pMainMenu) {
+    this->pMainMenu = pMainMenu;
 }
 
 bool Painter::loadFonts() {

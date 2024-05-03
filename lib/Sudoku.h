@@ -7,11 +7,15 @@
 
 #include <SDL.h>
 #include "Painter.h"
+#include "ViewType.h"
+
 
 class Sudoku {
-    bool quit{false};
+    MainMenu* pMainMenu;
 
     Painter* pPainter{nullptr};
+
+    ViewType currentView = ViewType::MAIN_MENU;
 
     int loadTextures();
 

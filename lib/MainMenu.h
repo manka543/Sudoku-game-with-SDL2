@@ -6,6 +6,8 @@
 #define SUDOKU_GAME_WITH_SDL2_MAINMENU_H
 
 #include <SDL_ttf.h>
+#include <MouseButton.h>
+#include <ViewType.h>
 
 class MainMenu {
 
@@ -33,8 +35,6 @@ class MainMenu {
 
 public:
 
-
-
     MainMenu(SDL_Renderer* pRenderer, TTF_Font* pFontMain64);
 
     ~MainMenu();
@@ -45,6 +45,7 @@ public:
 
     void setMousePosition(const int &xPos, const int &yPos);
 
+    ViewType click(const MouseButton& mouseButton);
 
 };
 

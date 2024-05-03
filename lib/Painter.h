@@ -16,9 +16,8 @@
 class Painter {
 
     SDL_Window *pWindow{nullptr};
-    SDL_Renderer *pRenderer{nullptr};
 
-    TTF_Font* pFontMain64{nullptr};
+
 
     int createWindow();
 
@@ -27,7 +26,11 @@ class Painter {
     bool loadFonts();
 
 public:
-    MainMenu *pMainMenu;
+    MainMenu *pMainMenu{nullptr};
+
+    SDL_Renderer *pRenderer{nullptr};
+
+    TTF_Font* pFontMain64{nullptr};
 
     Painter();
 
@@ -36,6 +39,9 @@ public:
     bool isSuccessfullyInitialized{true};
 
     void paintMainMenu();
+
+    void setMainMenu(MainMenu* pMainMenu);
+
 
 
 };

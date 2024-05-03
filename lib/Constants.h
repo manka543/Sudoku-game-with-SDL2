@@ -34,7 +34,7 @@ public:
     static constexpr SDL_Rect MAIN_MENU_POINTER_POSITION_PLAY{180,250,60,100};
     static constexpr SDL_Rect MAIN_MENU_POINTER_POSITION_QUIT{180,400,60,100};
 
-    static constexpr char FONT_MAIN_PATH[] = R"(Z:\projekty\studia\Sudoku-game-with-SDL2\assets\fonts\Lato-Black.ttf)";
+    static constexpr char FONT_MAIN_PATH[] = R"(assets\fonts\Lato-Black.ttf)";
 
     static constexpr int FONT_MAIN_SIZE_64{288};
 };
