@@ -8,12 +8,19 @@
 #include <SDL.h>
 #include "Painter.h"
 #include "ViewType.h"
+#include <memory>
 
 
 class Sudoku {
-    MainMenu* pMainMenu;
+//    MainMenu* pMainMenu;
 
-    Painter* pPainter{nullptr};
+    std::shared_ptr<MainMenu> pMainMenu;
+
+    std::shared_ptr<Game> pGame;
+
+//    Painter* pPainter{nullptr};
+
+    std::unique_ptr<Painter> pPainter;
 
     ViewType currentView = ViewType::MAIN_MENU;
 

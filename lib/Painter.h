@@ -11,13 +11,12 @@
 #include "MainMenu.h"
 
 #include <iostream>
-
+#include "Game.h"
+#include <memory>
 
 class Painter {
 
-    SDL_Window *pWindow{nullptr};
-
-
+    std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> pWindow;
 
     int createWindow();
 
@@ -26,11 +25,16 @@ class Painter {
     bool loadFonts();
 
 public:
-    MainMenu *pMainMenu{nullptr};
+    std::weak_ptr<MainMenu> pMainMenu;
 
-    SDL_Renderer *pRenderer{nullptr};
+    std::shared_ptr<Game> pGame;
 
-    TTF_Font* pFontMain64{nullptr};
+    std::shared_ptr<SDL_Renderer> pRenderer;
+
+//    TTF_Font* pFontMain64{nullptr};
+    std::shared_ptr<TTF_Font> pFontMain64;
+    std::shared_ptr<TTF_Font> pFontMain100;
+
 
     Painter();
 
@@ -40,7 +44,11 @@ public:
 
     void paintMainMenu();
 
-    void setMainMenu(MainMenu* pMainMenu);
+    void paintGame();
+
+    void setMainMenu(std::shared_ptr<MainMenu>& pMainMenu);
+
+    void setGame(std::shared_ptr<Game>& pGame);
 
 
 

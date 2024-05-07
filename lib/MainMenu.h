@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 #include <MouseButton.h>
 #include <ViewType.h>
+#include <memory>
 
 class MainMenu {
 
@@ -19,25 +20,25 @@ class MainMenu {
 
     bool loadTexts();
 
-    SDL_Texture* pTitleText = nullptr;
-    SDL_Texture* pPlayTextDefault = nullptr;
-    SDL_Texture* pPlayTextSelected = nullptr;
-    SDL_Texture* pQuitTextDefault = nullptr;
-    SDL_Texture* pQuitTextSelected = nullptr;
-    SDL_Texture* pPointerText = nullptr;
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pTitleText{nullptr, &SDL_DestroyTexture};
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pPlayTextDefault{nullptr, &SDL_DestroyTexture};
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pPlayTextSelected{nullptr, &SDL_DestroyTexture};
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pQuitTextDefault{nullptr, &SDL_DestroyTexture};
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pQuitTextSelected{nullptr, &SDL_DestroyTexture};
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pPointerText{nullptr, &SDL_DestroyTexture};
 
-    TTF_Font* pFont = nullptr;
+    std::shared_ptr<TTF_Font> pFont;
 
     MenuOption selectedOption = MenuOption::NONE;
 
-    SDL_Renderer* pRenderer = nullptr;
+    std::shared_ptr<SDL_Renderer> pRenderer;
 
 
 public:
 
-    MainMenu(SDL_Renderer* pRenderer, TTF_Font* pFontMain64);
+    MainMenu(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64);
 
-    ~MainMenu();
+    ~MainMenu() = default;
 
     bool isSuccessfullyInitialized{true};
 

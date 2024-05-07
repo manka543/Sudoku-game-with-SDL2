@@ -5,18 +5,19 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <iostream>
+#include "Sudoku.h"
 #include "Utilities.h"
 #include "ErrorMessages.h"
 
 
-SDL_Texture* Utilities::generateTextTexture(const std::string &text, const SDL_Color& color, TTF_Font* pFont, SDL_Renderer* pRenderer) {
-    SDL_Surface* pTextSurface = TTF_RenderText_Blended(pFont, text.c_str(), color);
+SDL_Texture* Utilities::generateTextTexture(const std::string &text, const SDL_Color& color, std::shared_ptr<TTF_Font> pFont, std::shared_ptr<SDL_Renderer>& pRenderer) {
+    SDL_Surface* pTextSurface = TTF_RenderText_Blended(pFont.get(), text.c_str(), color);
     if(pTextSurface == nullptr){
         std::cerr<<ErrorMessages::TEXT_RENDERING_ERROR<<TTF_GetError()<<std::endl;
         return nullptr;
     }
 
-    SDL_Texture* pTextTexture = SDL_CreateTextureFromSurface(pRenderer,pTextSurface);
+    SDL_Texture* pTextTexture = SDL_CreateTextureFromSurface(pRenderer.get(),pTextSurface);
     SDL_FreeSurface(pTextSurface);
 
     if(pTextTexture == nullptr){
@@ -28,4 +29,28 @@ SDL_Texture* Utilities::generateTextTexture(const std::string &text, const SDL_C
 
 bool Utilities::isContaining(const SDL_Rect &rect, const int &pointX, const int &pointY) {
     return (pointX >= rect.x && pointX <= rect.x + rect.w) && (pointY >= rect.y && pointY <= rect.y + rect.h);
+}
+
+bool Utilities::initLibraries() {
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        std::cerr << ErrorMessages::SDL_INIT_ERROR << SDL_GetError() << std::endl;
+        return false;
+    } else if (TTF_Init() == -1) {
+        std::cerr << ErrorMessages::TTF_INIT_ERROR << TTF_GetError() << std::endl;
+        return false;
+    }
+    return true;
+}
+
+void Utilities::runGame() {
+    Sudoku sudoku{};
+}
+
+void Utilities::quitLibraries() {
+    if(TTF_WasInit()){
+        TTF_Quit();
+    }
+    if(SDL_WasInit(SDL_INIT_EVERYTHING)){
+        SDL_Quit();
+    }
 }

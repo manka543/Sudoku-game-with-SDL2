@@ -11,54 +11,60 @@
 #include "MouseButton.h"
 
 Sudoku::Sudoku() {
-    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
-        std::cerr<<ErrorMessages::SDL_INIT_ERROR << SDL_GetError() << std::endl;
+    pPainter = std::make_unique<Painter>();
+    if (!pPainter->isSuccessfullyInitialized) {
         return;
     }
 
-    pPainter = new Painter();
-    if(!pPainter->isSuccessfullyInitialized)
-    {
-        return;
-    }
+//    pMainMenu = new MainMenu{pPainter->pRenderer, pPainter->pFontMain64};
 
-    pMainMenu = new MainMenu{pPainter->pRenderer, pPainter->pFontMain64};
-    if(!pMainMenu->isSuccessfullyInitialized)
-    {
+    pMainMenu = std::make_shared<MainMenu>(pPainter->pRenderer, pPainter->pFontMain64);
+    if (!pMainMenu->isSuccessfullyInitialized) {
         return;
     }
 
     pPainter->setMainMenu(pMainMenu);
 
+    pGame = std::make_shared<Game>(pPainter->pRenderer, pPainter->pFontMain64);
+
+    pPainter->setGame(pGame);
+
+
     mainLoop();
 }
 
 void Sudoku::mainLoop() {
-    while(true){
+    while (true) {
         Uint64 start = SDL_GetPerformanceCounter();
         SDL_Event event{};
-        while(SDL_PollEvent(&event)){
-            if(event.type == SDL_QUIT){
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
                 return;
             }
-            if (event.type == SDL_MOUSEMOTION){
+            if (event.type == SDL_MOUSEMOTION) {
                 pMainMenu->setMousePosition(event.motion.x, event.motion.y);
-            } else if (event.type == SDL_MOUSEBUTTONDOWN && static_cast<MouseButton>(event.button.button) == MouseButton::LEFT){
+            } else if (event.type == SDL_MOUSEBUTTONDOWN &&
+                       static_cast<MouseButton>(event.button.button) == MouseButton::LEFT) {
                 pMainMenu->setMousePosition(event.motion.x, event.motion.y);
                 currentView = pMainMenu->click(MouseButton::LEFT);
             }
         }
-        switch(currentView)
-        {
-        case ViewType::MAIN_MENU:{
+        switch (currentView) {
+            case ViewType::MAIN_MENU: {
                 pPainter->paintMainMenu();
                 break;
             }
-        case ViewType::QUIT:
-            {
+            case ViewType::QUIT: {
                 return;
             }
-
+            case ViewType::GAME: {
+                pPainter->paintGame();
+                break;
+            }
+            case ViewType::GAME_ESCAPE: {
+                return;
+                break;
+            }
         }
 
         Uint64 end = SDL_GetPerformanceCounter();
@@ -71,16 +77,8 @@ void Sudoku::mainLoop() {
 }
 
 Sudoku::~Sudoku() {
-    delete pMainMenu;
-    pMainMenu = nullptr;
-    pPainter->setMainMenu(pMainMenu);
-
-
-    delete pPainter;
-    pPainter = nullptr;
-
+//    pMainMenu.reset();
     // quit SDL2
-    SDL_Quit();
 }
 
 
