@@ -20,6 +20,8 @@ class Game {
 
     std::vector<std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>> pNumbers;
 
+//    std::vector<std::>;
+
 public:
 
     Game(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64);

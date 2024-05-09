@@ -10,14 +10,14 @@
 #include "ErrorMessages.h"
 
 
-SDL_Texture* Utilities::generateTextTexture(const std::string &text, const SDL_Color& color, std::shared_ptr<TTF_Font> pFont, std::shared_ptr<SDL_Renderer>& pRenderer) {
+Utilities::TextureUniPtr Utilities::generateTextTexture(const std::string &text, const SDL_Color& color, const std::shared_ptr<TTF_Font>& pFont, const std::shared_ptr<SDL_Renderer>& pRenderer) {
     SDL_Surface* pTextSurface = TTF_RenderText_Blended(pFont.get(), text.c_str(), color);
     if(pTextSurface == nullptr){
         std::cerr<<ErrorMessages::TEXT_RENDERING_ERROR<<TTF_GetError()<<std::endl;
-        return nullptr;
+        return TextureUniPtr{nullptr, &SDL_DestroyTexture};
     }
 
-    SDL_Texture* pTextTexture = SDL_CreateTextureFromSurface(pRenderer.get(),pTextSurface);
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pTextTexture(SDL_CreateTextureFromSurface(pRenderer.get(),pTextSurface), &SDL_DestroyTexture);
     SDL_FreeSurface(pTextSurface);
 
     if(pTextTexture == nullptr){
@@ -53,4 +53,11 @@ void Utilities::quitLibraries() {
     if(SDL_WasInit(SDL_INIT_EVERYTHING)){
         SDL_Quit();
     }
+}
+
+Utilities::NumberTexture::NumberTexture(int number, const std::shared_ptr<TTF_Font>& pFont, const std::shared_ptr<SDL_Renderer>& pRenderer) {
+    textures.emplace(NumberTextureVersion::User, std::move(Utilities::generateTextTexture(std::to_string(number),
+                                                      Constants::MAIN_MENU_OPTIONS_SELECTED_TEXT_COLOR,
+                                                      pFont, pRenderer)));
+
 }

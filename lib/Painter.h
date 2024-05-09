@@ -31,10 +31,8 @@ public:
 
     std::shared_ptr<SDL_Renderer> pRenderer;
 
-//    TTF_Font* pFontMain64{nullptr};
     std::shared_ptr<TTF_Font> pFontMain64;
     std::shared_ptr<TTF_Font> pFontMain100;
-
 
     Painter();
 
@@ -49,8 +47,6 @@ public:
     void setMainMenu(std::shared_ptr<MainMenu>& pMainMenu);
 
     void setGame(std::shared_ptr<Game>& pGame);
-
-
 
 };
 

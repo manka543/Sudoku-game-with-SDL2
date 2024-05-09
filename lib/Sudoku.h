@@ -12,13 +12,10 @@
 
 
 class Sudoku {
-//    MainMenu* pMainMenu;
 
     std::shared_ptr<MainMenu> pMainMenu;
 
     std::shared_ptr<Game> pGame;
-
-//    Painter* pPainter{nullptr};
 
     std::unique_ptr<Painter> pPainter;
 
