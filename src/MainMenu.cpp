@@ -11,39 +11,38 @@
 #include <iostream>
 
 bool MainMenu::loadTexts() {
-    pTitleText.reset(
-            Utilities::generateTextTexture(Constants::MAIN_MENU_TITLE_TEXT, Constants::MAIN_MENU_TITLE_TEXT_COLOR,
-                                           pFont, pRenderer));
+    pTitleText = Utilities::generateTextTexture(Constants::MAIN_MENU_TITLE_TEXT, Constants::MAIN_MENU_TITLE_TEXT_COLOR,
+                                           pFont, pRenderer);
     if (pTitleText == nullptr) {
         return false;
     }
-    pPlayTextDefault.reset(Utilities::generateTextTexture(Constants::MAIN_MENU_PLAY_TEXT,
+    pPlayTextDefault = Utilities::generateTextTexture(Constants::MAIN_MENU_PLAY_TEXT,
                                                           Constants::MAIN_MENU_OPTIONS_TEXT_COLOR,
-                                                          pFont, pRenderer));
+                                                          pFont, pRenderer);
     if (pPlayTextDefault == nullptr) {
         return false;
     }
-    pPlayTextSelected.reset(Utilities::generateTextTexture(Constants::MAIN_MENU_PLAY_TEXT,
+    pPlayTextSelected = Utilities::generateTextTexture(Constants::MAIN_MENU_PLAY_TEXT,
                                                            Constants::MAIN_MENU_OPTIONS_SELECTED_TEXT_COLOR,
-                                                           pFont, pRenderer));
+                                                           pFont, pRenderer);
     if (pPlayTextSelected == nullptr) {
         return false;
     }
-    pQuitTextDefault.reset(Utilities::generateTextTexture(Constants::MAIN_MENU_QUIT_TEXT,
+    pQuitTextDefault = Utilities::generateTextTexture(Constants::MAIN_MENU_QUIT_TEXT,
                                                           Constants::MAIN_MENU_OPTIONS_TEXT_COLOR,
-                                                          pFont, pRenderer));
+                                                          pFont, pRenderer);
     if (pQuitTextDefault == nullptr) {
         return false;
     }
-    pQuitTextSelected.reset(Utilities::generateTextTexture(Constants::MAIN_MENU_QUIT_TEXT,
+    pQuitTextSelected = Utilities::generateTextTexture(Constants::MAIN_MENU_QUIT_TEXT,
                                                            Constants::MAIN_MENU_OPTIONS_SELECTED_TEXT_COLOR,
-                                                           pFont, pRenderer));
+                                                           pFont, pRenderer);
     if (pQuitTextSelected == nullptr) {
         return false;
     }
-    pPointerText.reset(Utilities::generateTextTexture(Constants::MAIN_MENU_POINTER_TEXT,
+    pPointerText = Utilities::generateTextTexture(Constants::MAIN_MENU_POINTER_TEXT,
                                                       Constants::MAIN_MENU_OPTIONS_SELECTED_TEXT_COLOR,
-                                                      pFont, pRenderer));
+                                                      pFont, pRenderer);
     if (pPointerText == nullptr) {
         return false;
     }

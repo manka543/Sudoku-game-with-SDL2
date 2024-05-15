@@ -33,6 +33,7 @@ public:
 
     std::shared_ptr<TTF_Font> pFontMain64;
     std::shared_ptr<TTF_Font> pFontMain100;
+    std::shared_ptr<TTF_Font> pFontBold100;
 
     Painter();
 

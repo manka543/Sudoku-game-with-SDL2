@@ -3,6 +3,9 @@
 //
 
 #include "Game.h"
+
+#include <cmath>
+
 #include "Constants.h"
 
 Game::Game(std::shared_ptr<SDL_Renderer> &pRenderer, std::shared_ptr<TTF_Font> &pFont) : pRenderer(pRenderer), pFont(pFont) {

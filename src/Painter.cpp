@@ -83,6 +83,11 @@ bool Painter::loadFonts() {
         return false;
     }
 
+    pFontBold100 = std::shared_ptr<TTF_Font>(TTF_OpenFont(Constants::FONT_BOLD_PATH, Constants::FONT_SIZE_100), &TTF_CloseFont);
+    if(pFontBold100 == nullptr)
+    {
+        std::cerr << ErrorMessages::FONT_OPENING_ERROR << TTF_GetError() << std::endl;
+    }
     return true;
 }
 

@@ -35,6 +35,7 @@ public:
     static constexpr SDL_Rect MAIN_MENU_POINTER_POSITION_QUIT{180, 400, 60, 100};
 
     static constexpr char FONT_MAIN_PATH[] = R"(assets\fonts\Lato-Black.ttf)";
+    static constexpr char FONT_BOLD_PATH[] = R"(assets\fonts\Lato-Bold.ttf)";
 
     static constexpr int FONT_MAIN_SIZE_64{288};
     static constexpr int FONT_SIZE_100{100};
@@ -51,6 +52,8 @@ public:
     static constexpr SDL_Color GAME_BOARD_NUMBER_COLOR{0xe1, 0xf7, 0xf5, 0xff};
     static constexpr SDL_Color GAME_BOARD_NUMBER_ERROR_COLOR{0xfc,0x41,0x00,0xff};
 
+    static constexpr SDL_Color GAME_NUMBER_COLOR{0xbb,0xbb,0xbb,0xff};
+    static constexpr SDL_Color GAME_NUMBER_ERROR_COLOR{0xee,0x80,0x80,0xff};
 };
 
 #endif //PROJECT_NAME_PROGRAMCONSTANTS_H

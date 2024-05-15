@@ -33,7 +33,7 @@ namespace Utilities {
 
     class NumberTexture {
     public:
-        NumberTexture(int number, const std::shared_ptr<TTF_Font> &pFont,
+        NumberTexture(const int& number, const std::shared_ptr<TTF_Font> &pFont, const std::shared_ptr<TTF_Font> &pBoldFont,
                       const std::shared_ptr<SDL_Renderer> &pRenderer);
 
         std::unordered_map<NumberTextureVersion, TextureUniPtr> textures;
