@@ -26,7 +26,7 @@ class Sudoku {
 public:
     Sudoku();
 
-    ~Sudoku();
+    ~Sudoku() = default;
 
     void mainLoop();
 };

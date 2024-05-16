@@ -76,10 +76,6 @@ void Sudoku::mainLoop() {
     }
 }
 
-Sudoku::~Sudoku() {
-//    pMainMenu.reset();
-    // quit SDL2
-}
 
 
 int Sudoku::loadTextures() {
