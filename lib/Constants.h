@@ -34,8 +34,13 @@ public:
     static constexpr SDL_Rect MAIN_MENU_POINTER_POSITION_PLAY{180, 250, 60, 100};
     static constexpr SDL_Rect MAIN_MENU_POINTER_POSITION_QUIT{180, 400, 60, 100};
 
+#ifdef __linux__
+    static constexpr char FONT_MAIN_PATH[] = R"(assets/fonts/Lato-Black.ttf)";
+    static constexpr char FONT_BOLD_PATH[] = R"(assets/fonts/Lato-Bold.ttf)";
+#else
     static constexpr char FONT_MAIN_PATH[] = R"(assets\fonts\Lato-Black.ttf)";
     static constexpr char FONT_BOLD_PATH[] = R"(assets\fonts\Lato-Bold.ttf)";
+#endif
 
     static constexpr int FONT_MAIN_SIZE_64{288};
     static constexpr int FONT_SIZE_100{100};
