@@ -9,6 +9,7 @@
 #include <SDL_ttf.h>
 #include <memory>
 #include <vector>
+#include "Utilities.h"
 
 
 
@@ -17,14 +18,15 @@ class Game {
     std::shared_ptr<SDL_Renderer> pRenderer;
 
     std::shared_ptr<TTF_Font> pFont;
+    std::shared_ptr<TTF_Font> pBoldFont;
 
-    std::vector<std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)>> pNumbers;
+    std::vector<std::unique_ptr<Utilities::NumberTexture>> pNumbers{};
 
-//    std::vector<std::>;
+    std::vector<std::vector<int>> board;
 
 public:
 
-    Game(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64);
+    Game(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64, std::shared_ptr<TTF_Font> &pBoldFont);
     ~Game() = default;
 
     void paint();

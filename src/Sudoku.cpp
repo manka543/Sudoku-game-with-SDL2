@@ -25,7 +25,7 @@ Sudoku::Sudoku() {
 
     pPainter->setMainMenu(pMainMenu);
 
-    pGame = std::make_shared<Game>(pPainter->pRenderer, pPainter->pFontMain64);
+    pGame = std::make_shared<Game>(pPainter->pRenderer, pPainter->pFontMain64, pPainter->pFontBold100);
 
     pPainter->setGame(pGame);
 

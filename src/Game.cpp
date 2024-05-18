@@ -8,8 +8,15 @@
 
 #include "Constants.h"
 
-Game::Game(std::shared_ptr<SDL_Renderer> &pRenderer, std::shared_ptr<TTF_Font> &pFont) : pRenderer(pRenderer), pFont(pFont) {
-
+Game::Game(std::shared_ptr<SDL_Renderer> &pRenderer, std::shared_ptr<TTF_Font> &pFont, std::shared_ptr<TTF_Font> &pBoldFont) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont) {
+    for (int positionY = 0; positionY < 9; positionY++) {
+        board.emplace_back();
+        board[positionY].reserve(9);
+        for (int positionX = 0; positionX < 9; positionX++){
+            board[positionY].emplace_back((positionY+positionX)%10);
+        }
+    }
+    loadNumberTextures();
 }
 
 void Game::paint() {
@@ -38,8 +45,22 @@ void Game::paint() {
             SDL_RenderFillRect(pRenderer.get(), &boardSquare);
         }
     }
+
+    SDL_Rect numberRect{0,0,20,40};
+    for(int row = 0;  row < 9; row++){
+        for(int column = 0; column < 9; column++){
+            numberRect.x = Constants::GAME_BOARD_RECT.x + column * 56 + 25 + (int)std::floor(column/3)*3;
+            numberRect.y = Constants::GAME_BOARD_RECT.y + row * 56 + 20 + (int)std::floor(row/3)*3;
+            SDL_RenderCopy(pRenderer.get(), (*pNumbers[board[row][column]])[Utilities::NumberTextureVersion::Program].get(),
+                           nullptr, &numberRect);
+        }
+    }
 }
 
 bool Game::loadNumberTextures() {
-    return false;
+    pNumbers.reserve(10);
+    for(int number = 0; number < 10; number++){
+        pNumbers.push_back(std::make_unique<Utilities::NumberTexture>(number, pFont, pBoldFont, pRenderer));
+    }
+    return true;
 }
