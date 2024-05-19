@@ -44,6 +44,8 @@ public:
 
     void paint();
 
+    ViewType runEvent(const SDL_Event& event);
+
     void setMousePosition(const int &xPos, const int &yPos);
 
     ViewType click(const MouseButton& mouseButton);

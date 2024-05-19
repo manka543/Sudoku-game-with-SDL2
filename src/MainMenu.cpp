@@ -55,9 +55,6 @@ MainMenu::MainMenu(std::shared_ptr<SDL_Renderer> &pRenderer, std::shared_ptr<TTF
     loadTexts();
 }
 
-//MainMenu::~MainMenu() {
-//
-//}
 
 void MainMenu::paint() {
     SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::MAIN_MENU_TITLE_POSITION);
@@ -80,6 +77,18 @@ void MainMenu::paint() {
             break;
         }
     }
+}
+
+ViewType MainMenu::runEvent(const SDL_Event& event)
+{
+    if (event.type == SDL_MOUSEMOTION) {
+        setMousePosition(event.motion.x, event.motion.y);
+    } else if (event.type == SDL_MOUSEBUTTONDOWN &&
+               static_cast<MouseButton>(event.button.button) == MouseButton::LEFT) {
+        setMousePosition(event.motion.x, event.motion.y);
+        return click(MouseButton::LEFT);
+    }
+    return ViewType::MAIN_MENU;
 }
 
 void MainMenu::setMousePosition(const int &xPos, const int &yPos) {

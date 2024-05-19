@@ -16,7 +16,7 @@ Sudoku::Sudoku() {
         return;
     }
 
-//    pMainMenu = new MainMenu{pPainter->pRenderer, pPainter->pFontMain64};
+   // pMainMenu = new MainMenu{pPainter->pRenderer, pPainter->pFontMain64};
 
     pMainMenu = std::make_shared<MainMenu>(pPainter->pRenderer, pPainter->pFontMain64);
     if (!pMainMenu->isSuccessfullyInitialized) {
@@ -30,6 +30,7 @@ Sudoku::Sudoku() {
     pPainter->setGame(pGame);
 
 
+
     mainLoop();
 }
 
@@ -41,13 +42,21 @@ void Sudoku::mainLoop() {
             if (event.type == SDL_QUIT) {
                 return;
             }
-            if (event.type == SDL_MOUSEMOTION) {
-                pMainMenu->setMousePosition(event.motion.x, event.motion.y);
-            } else if (event.type == SDL_MOUSEBUTTONDOWN &&
-                       static_cast<MouseButton>(event.button.button) == MouseButton::LEFT) {
-                pMainMenu->setMousePosition(event.motion.x, event.motion.y);
-                currentView = pMainMenu->click(MouseButton::LEFT);
+            switch(currentView)
+            {
+            case ViewType::MAIN_MENU:
+                {
+                    currentView = pMainMenu->runEvent(event);
+                    break;
+                }
+            case ViewType::GAME:
+                {
+                    currentView = pGame->runEvent(event);
+                    break;
+                }
+
             }
+
         }
         switch (currentView) {
             case ViewType::MAIN_MENU: {

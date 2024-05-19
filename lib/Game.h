@@ -9,11 +9,15 @@
 #include <SDL_ttf.h>
 #include <memory>
 #include <vector>
+#include "ViewType.h"
 #include "Utilities.h"
 
-
-
 class Game {
+
+    enum class Direction : int {
+    left, right, up, down
+    };
+
 
     std::shared_ptr<SDL_Renderer> pRenderer;
 
@@ -24,6 +28,22 @@ class Game {
 
     std::vector<std::vector<int>> board;
 
+    std::pair<int, int> selectedSquare{-1,-1};
+
+    bool loadNumberTextures();
+
+    void placeNumber(const int& number);
+
+    void mouseClick(const int& xPos, const int& yPos);
+
+    void moveSelectedSquare(const Direction& direction);
+
+    void paintBoard();
+
+    void paintNumbers();
+
+    void paintSetNumberBoard();
+
 public:
 
     Game(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64, std::shared_ptr<TTF_Font> &pBoldFont);
@@ -31,10 +51,8 @@ public:
 
     void paint();
 
-    bool loadNumberTextures();
+    ViewType runEvent(const SDL_Event& event);
 
 };
-
-
 
 #endif //GAME_H

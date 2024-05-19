@@ -9,18 +9,18 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <memory>
-#include <unordered_map>
 
 namespace Utilities {
     typedef std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> TextureUniPtr;
 
-    TextureUniPtr
-    generateTextTexture(const std::string &text, const SDL_Color &color, const std::shared_ptr<TTF_Font> &pFont,
+    TextureUniPtr generateTextTexture(const std::string &text, const SDL_Color &color, const std::shared_ptr<TTF_Font> &pFont,
                         const std::shared_ptr<SDL_Renderer> &pRenderer);
 
     bool isContaining(const SDL_Rect &rect, const int &pointX, const int &pointY);
 
     bool initLibraries();
+
+    int decodeKey(const SDL_Keycode& key);
 
     void runGame();
 
@@ -50,7 +50,6 @@ namespace Utilities {
         ~NumberTexture() = default;
 
     };
-
 }
 
 

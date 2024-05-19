@@ -9,7 +9,10 @@
 
 Painter::Painter():pWindow(nullptr, SDL_DestroyWindow) {
 
-    if (!createWindow() || !createRenderer() || !loadFonts()) {
+    if (!createWindow()
+        || !createRenderer()
+        || !loadFonts()
+        ) {
         isSuccessfullyInitialized = false;
     }
 
@@ -43,7 +46,7 @@ int Painter::createWindow() {
 }
 
 int Painter::createRenderer() {
-    pRenderer.reset((SDL_CreateRenderer(pWindow.get(), -1, SDL_RENDERER_ACCELERATED)), &SDL_DestroyRenderer);
+    pRenderer = std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)>((SDL_CreateRenderer(pWindow.get(), -1, SDL_RENDERER_ACCELERATED)), &SDL_DestroyRenderer);
     if (pRenderer == nullptr) {
         std::cerr << ErrorMessages::RENDERER_CREATE_ERROR << SDL_GetError() << std::endl;
         return 0;

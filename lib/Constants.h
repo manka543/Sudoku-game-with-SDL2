@@ -7,7 +7,8 @@
 
 #include <string_view>
 
-class Constants {
+class Constants
+{
 public:
     static constexpr int WINDOW_HEIGHT{720};
     static constexpr int WINDOW_WIDTH{720};
@@ -49,7 +50,9 @@ public:
     static constexpr SDL_Color GAME_BOARD_BACKGROUND_COLOR{0x12, 0x14, 0x81, 0xff};
     static constexpr SDL_Color GAME_BOARD_OUTER_FRAME_COLOR{0x1e, 0x03, 0x42, 0xff};
     static constexpr SDL_Color GAME_BOARD_INNER_FRAME_COLOR{0x2e, 0x13, 0x52, 0xff};
+    static constexpr SDL_Color GAME_BOARD_SELECTED_SQUARE_COLOR{0x99,0x99,0x99,0xff};
     static constexpr SDL_Rect GAME_BOARD_RECT{96, 96, 528, 528};
+    static constexpr SDL_Rect GAME_BOARD_SQUARE_RECT{0,0,50,50};
 
     static constexpr int GAME_BOARD_NUMBER_WIDTH{44};
     static constexpr int GAME_BOARD_NUMBER_HEIGHT{44};
@@ -59,6 +62,8 @@ public:
 
     static constexpr SDL_Color GAME_NUMBER_COLOR{0xbb,0xbb,0xbb,0xff};
     static constexpr SDL_Color GAME_NUMBER_ERROR_COLOR{0xee,0x80,0x80,0xff};
+
+    static constexpr SDL_Rect GAME_SET_NUMBER_BOARD_RECT{77,658,566,62};
 };
 
 #endif //PROJECT_NAME_PROGRAMCONSTANTS_H
