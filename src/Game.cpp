@@ -10,18 +10,10 @@
 
 #include <iostream>
 
-Game::Game(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFont,
-           std::shared_ptr<TTF_Font>& pBoldFont) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont)
+Game::Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFont,
+           const std::shared_ptr<TTF_Font>& pBoldFont) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont),
+            board(Board::DificultyLevel::hard)
 {
-    for (int positionY = 0; positionY < 9; positionY++)
-    {
-        board.emplace_back();
-        board[positionY].reserve(9);
-        for (int positionX = 0; positionX < 9; positionX++)
-        {
-            board[positionY].emplace_back(((positionY + positionX) % 9) + 1);
-        }
-    }
     loadNumberTextures();
 }
 
@@ -33,6 +25,7 @@ void Game::paint()
 
     paintSetNumberBoard();
 
+    paintUI();
 }
 
 ViewType Game::runEvent(const SDL_Event& event)
@@ -82,6 +75,10 @@ ViewType Game::runEvent(const SDL_Event& event)
             }
             break;
         }
+    case SDL_MOUSEMOTION:
+        {
+            isOnPauseButton = Utilities::isContaining(Constants::GAME_PAUSE_BUTTON_HITBOX, event.motion.x, event.motion.y);
+        }
     default:
         {
             break;
@@ -104,7 +101,7 @@ void Game::placeNumber(const int& number)
 {
     if(selectedSquare.first != -1)
     {
-        board[selectedSquare.second][selectedSquare.first] = number;
+        board.setSquare(number, selectedSquare.second, selectedSquare.first);
     }
 }
 
@@ -277,19 +274,19 @@ void Game::paintNumbers()
     {
         for (int column = 0; column < 9; column++)
         {
-            if((board[row][column]) != 0 )
+            if((board.getSquare(row,column).value) != 0 )
             {
             numberRect.x = Constants::GAME_BOARD_RECT.x + column * 56 + 25 + (int)std::floor(column / 3) * 3;
             numberRect.y = Constants::GAME_BOARD_RECT.y + row * 56 + 20 + (int)std::floor(row / 3) * 3;
             SDL_RenderCopy(pRenderer.get(),
-                           (*pNumbers[(board[row][column]) - 1])[Utilities::NumberTextureVersion::Program].get(),
+                           (*pNumbers[(board.getSquare(row,column).value) - 1])[Utilities::NumberTextureVersion::Program].get(),
                            nullptr, &numberRect);
             }
         }
     }
 }
 
-void Game::paintSetNumberBoard()
+void Game::paintSetNumberBoard() const
 {
     SDL_SetRenderDrawColor(pRenderer.get(), Constants::GAME_BOARD_INNER_FRAME_COLOR.r, Constants::GAME_BOARD_INNER_FRAME_COLOR.g, Constants::GAME_BOARD_INNER_FRAME_COLOR.b, Constants::GAME_BOARD_INNER_FRAME_COLOR.a);
     SDL_RenderFillRect(pRenderer.get(), &Constants::GAME_SET_NUMBER_BOARD_RECT);
@@ -307,5 +304,21 @@ void Game::paintSetNumberBoard()
         squareRect.x += 56;
         numberRect.x += 56;
     }
+}
+
+void Game::paintUI()
+{
+    SDL_Rect pauseGameRect{10,10,15,40};
+    if(isOnPauseButton)
+    {
+        SDL_SetRenderDrawColor(pRenderer.get(), Constants::GAME_BOARD_BACKGROUND_COLOR.r, Constants::GAME_BOARD_BACKGROUND_COLOR.g, Constants::GAME_BOARD_BACKGROUND_COLOR.b, Constants::GAME_BOARD_BACKGROUND_COLOR.a);
+    } else
+    {
+        SDL_SetRenderDrawColor(pRenderer.get(), Constants::GAME_BOARD_OUTER_FRAME_COLOR.r, Constants::GAME_BOARD_OUTER_FRAME_COLOR.g, Constants::GAME_BOARD_OUTER_FRAME_COLOR.b, Constants::GAME_BOARD_OUTER_FRAME_COLOR.a);
+    }
+    SDL_RenderFillRect(pRenderer.get(), &pauseGameRect);
+    pauseGameRect.x +=25;
+    SDL_RenderFillRect(pRenderer.get(), &pauseGameRect);
+
 }
 

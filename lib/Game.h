@@ -9,6 +9,7 @@
 #include <SDL_ttf.h>
 #include <memory>
 #include <vector>
+#include "Board.h"
 #include "ViewType.h"
 #include "Utilities.h"
 
@@ -18,7 +19,6 @@ class Game {
     left, right, up, down
     };
 
-
     std::shared_ptr<SDL_Renderer> pRenderer;
 
     std::shared_ptr<TTF_Font> pFont;
@@ -26,9 +26,11 @@ class Game {
 
     std::vector<std::unique_ptr<Utilities::NumberTexture>> pNumbers{};
 
-    std::vector<std::vector<int>> board;
+    Board board;
 
     std::pair<int, int> selectedSquare{-1,-1};
+
+    bool isOnPauseButton{false};
 
     bool loadNumberTextures();
 
@@ -42,11 +44,13 @@ class Game {
 
     void paintNumbers();
 
-    void paintSetNumberBoard();
+    void paintSetNumberBoard() const;
+
+    void paintUI();
 
 public:
 
-    Game(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64, std::shared_ptr<TTF_Font> &pBoldFont);
+    Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFontMain64, const std::shared_ptr<TTF_Font> &pBoldFont);
     ~Game() = default;
 
     void paint();

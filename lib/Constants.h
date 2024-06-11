@@ -64,6 +64,16 @@ public:
     static constexpr SDL_Color GAME_NUMBER_ERROR_COLOR{0xee,0x80,0x80,0xff};
 
     static constexpr SDL_Rect GAME_SET_NUMBER_BOARD_RECT{77,658,566,62};
+
+    static constexpr SDL_Rect GAME_PAUSE_BUTTON_HITBOX{0,0,60,60};
+
+    static constexpr int EASY_LEVEL_MAX_CLUES{46};
+    static constexpr int MEDIUM_LEVEL_MAX_CLUES{35};
+    static constexpr int HARD_LEVEL_MAX_CLUES{31};
+
+    static constexpr int BOARD_GENERATING_TIMEOUT_MS{2000};
+
+
 };
 
 #endif //PROJECT_NAME_PROGRAMCONSTANTS_H
