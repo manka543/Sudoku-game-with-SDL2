@@ -34,6 +34,8 @@ class Board {
 
     bool isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int lastDeletedNumber);
 
+    std::vector<std::pair<int, int>> getFullSquares();
+
 
 public:
 

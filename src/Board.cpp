@@ -153,9 +153,7 @@ int Board::removeValue(int maxNumbers, std::list<std::pair<int, int>>& positions
             positionsToRemove.insert(position, *position);
         }
     }
-    return bestResult;
-
-
+    return static_cast<int>(bestResult);
 }
 
 bool Board::isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int lastDeletedNumber)
@@ -191,6 +189,20 @@ bool Board::isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int l
     return false;
 }
 
+std::vector<std::pair<int, int>> Board::getFullSquares()
+{
+    std::vector<std::pair<int, int>> positions{};
+    positions.reserve(81);
+    for(int i = 0; i < 9; i++)
+    {
+        for(int j = 0; j < 9; j++)
+        {
+            positions.emplace_back(std::make_pair(i,j));
+        }
+    }
+    return positions;
+}
+
 
 Board::Board(const DificultyLevel& dificultyLevel)
 {
@@ -198,12 +210,12 @@ Board::Board(const DificultyLevel& dificultyLevel)
     auto start = std::chrono::high_resolution_clock::now();
 
     // Call the function to be timed
-    for(int i = 0; i < 10; i++)
-    {
-        reset();
-        auto possibilities = getEmptySquares();
-        solveBoardFast(possibilities);
-    }
+    // for(int i = 0; i < 10; i++)
+    // {
+    //     reset();
+    //     auto possibilities = getEmptySquares();
+    //     solveBoardFast(possibilities);
+    // }
 
     // Get the ending point
     auto end = std::chrono::high_resolution_clock::now();
@@ -217,10 +229,14 @@ Board::Board(const DificultyLevel& dificultyLevel)
     start = std::chrono::high_resolution_clock::now();
 
     // Call the function to be timed
-    for(int i = 0; i < 10; i++)
+    // for(int i = 0; i < 10; i++)
     {
-        reset();
         solveBoardRandom();
+        auto fullSquares = getFullSquares();
+        std::ranges::shuffle(fullSquares.begin(), fullSquares.end(), gen);
+        std::list<std::pair<int, int>> fullSquaresList{fullSquares.begin(), fullSquares.end()};
+
+        removeValue(60, fullSquaresList);
     }
 
 
