@@ -32,7 +32,7 @@ class Loading {
     std::chrono::time_point<std::chrono::high_resolution_clock> lastChange{};
 
 public:
-    Loading(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFont, std::shared_ptr<Board> pBoard);
+    Loading(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFont, std::shared_ptr<Board>& pBoard);
     ~Loading() = default;
 
     ViewType checkLoading();

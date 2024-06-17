@@ -11,9 +11,10 @@
 #include <iostream>
 
 Game::Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFont,
-           const std::shared_ptr<TTF_Font>& pBoldFont, std::shared_ptr<Board> pBoard) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont), pBoard(pBoard)
+           const std::shared_ptr<TTF_Font>& pBoldFont, std::shared_ptr<Board>& pBoard) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont), pBoard(pBoard)
 {
     loadNumberTextures();
+    loadText();
 }
 
 
@@ -97,11 +98,21 @@ bool Game::loadNumberTextures()
     return true;
 }
 
+bool Game::loadText()
+{
+    pGameWonText = Utilities::generateTextTexture(Constants::GAME_WON_TEXT, Constants::GAME_NUMBER_COLOR, pFont, pRenderer);
+    if(pGameWonText == nullptr)
+    {
+        return false;
+    }
+    return true;
+}
+
 void Game::placeNumber(const int& number)
 {
     if(selectedSquare.first != -1)
     {
-        pBoard->setSquare(number, selectedSquare.second, selectedSquare.first);
+        pBoard->setSquare(number, Square::Type::User, selectedSquare.second, selectedSquare.first);
     }
 }
 
@@ -279,7 +290,7 @@ void Game::paintNumbers()
             numberRect.x = Constants::GAME_BOARD_RECT.x + column * 56 + 25 + (int)std::floor(column / 3) * 3;
             numberRect.y = Constants::GAME_BOARD_RECT.y + row * 56 + 20 + (int)std::floor(row / 3) * 3;
             SDL_RenderCopy(pRenderer.get(),
-                           (*pNumbers[(pBoard->getSquare(row,column).value) - 1])[Utilities::NumberTextureVersion::Program].get(),
+                           (*pNumbers[(pBoard->getSquare(row,column).value) - 1])[pBoard->getSquare(row, column).type].get(),
                            nullptr, &numberRect);
             }
         }
@@ -299,7 +310,7 @@ void Game::paintSetNumberBoard() const
         SDL_RenderFillRect(pRenderer.get(), &squareRect);
         if(i!=0)
         {
-            SDL_RenderCopy(pRenderer.get(), (*pNumbers[i-1])[Utilities::NumberTextureVersion::User].get(),nullptr, &numberRect);
+            SDL_RenderCopy(pRenderer.get(), (*pNumbers[i-1])[Square::Type::User].get(),nullptr, &numberRect);
         }
         squareRect.x += 56;
         numberRect.x += 56;
@@ -308,6 +319,10 @@ void Game::paintSetNumberBoard() const
 
 void Game::paintUI()
 {
+    if(pBoard->isGameWon())
+    {
+        SDL_RenderCopy(pRenderer.get(), pGameWonText.get(), nullptr, &Constants::GAME_WON_TEXT_POSITION);
+    }
     SDL_Rect pauseGameRect{10,10,15,40};
     if(isOnPauseButton)
     {

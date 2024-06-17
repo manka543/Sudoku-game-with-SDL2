@@ -71,8 +71,10 @@ public:
     static constexpr int GAME_BOARD_NUMBER_WIDTH{44};
     static constexpr int GAME_BOARD_NUMBER_HEIGHT{44};
 
-    static constexpr SDL_Color GAME_BOARD_NUMBER_COLOR{0xe1, 0xf7, 0xf5, 0xff};
-    static constexpr SDL_Color GAME_BOARD_NUMBER_ERROR_COLOR{0xfc,0x41,0x00,0xff};
+    static constexpr SDL_Color GAME_BOARD_USER_NUMBER_COLOR{0xe1, 0xf7, 0xf5, 0xff};
+    static constexpr SDL_Color GAME_BOARD_PROGRAM_NUMBER_COLOR{0xa1, 0xb7, 0xb5, 0xff};
+    static constexpr SDL_Color GAME_BOARD_USER_NUMBER_ERROR_COLOR{0xfc,0x41,0x00,0xff};
+    static constexpr SDL_Color GAME_BOARD_PROGRAM_NUMBER_ERROR_COLOR{0xcc,0x21,0x00,0xff};
 
     static constexpr SDL_Color GAME_NUMBER_COLOR{0xbb,0xbb,0xbb,0xff};
     static constexpr SDL_Color GAME_NUMBER_ERROR_COLOR{0xee,0x80,0x80,0xff};
@@ -80,6 +82,9 @@ public:
     static constexpr SDL_Rect GAME_SET_NUMBER_BOARD_RECT{77,658,566,62};
 
     static constexpr SDL_Rect GAME_PAUSE_BUTTON_HITBOX{0,0,60,60};
+
+    static constexpr char GAME_WON_TEXT[] = "You won!!!";
+    static constexpr SDL_Rect GAME_WON_TEXT_POSITION{150,635,250,60};
 
 
     static constexpr int EASY_LEVEL_MAX_CLUES{46};

@@ -6,15 +6,14 @@
 #define SQUARE_H
 
 
-
 struct Square
 {
     enum Type
     {
-        none, user, userFault, program, programFault
+        None, User, UserFault, Program, ProgramFault
     };
 
-    Square(): type(none), value(0){};
+    Square(): type(None), value(0){};
     Square(Type type, int value): type(type), value(value){};
 
     Type type;

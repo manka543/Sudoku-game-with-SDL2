@@ -8,8 +8,6 @@
 #include <array>
 #include <vector>
 #include <random>
-#include <algorithm>
-#include <list>
 #include "Square.h"
 #include <thread>
 
@@ -40,11 +38,14 @@ private:
 
     bool isBoardGenerationFinished{false};
 
+    bool isBoardCorrect {false};
+
     DificultyLevel dificultyLevel{DificultyLevel::easy};
 
     std::pair<int, int> getFirstEmptyCell();
 
     std::thread boardGeneration;
+
 
     bool isSafe(const int& number, const std::pair<int, int>& coords);
 
@@ -53,13 +54,17 @@ private:
     void reset();
     void copyBoard(int NOFullCells);
 
-    std::pair<bool, int> removeValue(int maxNumbers, int minNumbers, std::list<std::pair<int, int>>& positionsToRemove);
+    std::pair<bool, int> removeValue(int maxNumbers, int minNumbers, std::vector<std::pair<int, int>>& positionsToRemove);
 
     bool isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int lastDeletedNumber);
 
     std::vector<std::pair<int, int>> getFullSquares();
 
     void generateBoard(DificultyLevel dificultyLevel);
+
+    void checkBoard();
+
+
 
 public:
 
@@ -68,7 +73,7 @@ public:
     ~Board() = default;
 
     Square getSquare(const int& row, const int& column) const;
-    void setSquare(const int& number, const int& row, const int& column);
+    void setSquare(const int& number, const Square::Type& type, const int& row, const int& column);
 
     bool solveBoardRandom();
     bool solveBoardFast(std::vector<std::pair<std::pair<int, int>, std::vector<int>>>& emptySquares);
@@ -76,6 +81,10 @@ public:
     bool hasBoardGenerationEnded();
 
     void runBoardGeneration(DificultyLevel dificultyLevel);
+
+    void boardInspection();
+
+    bool isGameWon() const { return isBoardCorrect;}
 
 };
 

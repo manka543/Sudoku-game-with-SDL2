@@ -9,6 +9,7 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <memory>
+#include "Square.h"
 
 namespace Utilities {
     typedef std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> TextureUniPtr;
@@ -26,12 +27,13 @@ namespace Utilities {
 
     void quitLibraries();
 
-    enum class NumberTextureVersion : int {
-        User,
-        UserFault,
-        Program,
-        ProgramFault,
-    };
+    // enum class NumberTextureVersion : int {
+    //     None,
+    //     User,
+    //     UserFault,
+    //     Program,
+    //     ProgramFault,
+    // };
 
     class NumberTexture {
     public:
@@ -45,7 +47,7 @@ namespace Utilities {
         TextureUniPtr pProgramTexture{nullptr, &SDL_DestroyTexture};
         TextureUniPtr pProgramFaultTexture{nullptr, &SDL_DestroyTexture};
 
-        TextureUniPtr &operator[](const NumberTextureVersion &version);
+        TextureUniPtr &operator[](const Square::Type &version);
 
         ~NumberTexture() = default;
 

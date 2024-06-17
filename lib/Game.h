@@ -24,6 +24,8 @@ class Game {
     std::shared_ptr<TTF_Font> pFont;
     std::shared_ptr<TTF_Font> pBoldFont;
 
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pGameWonText{nullptr, &SDL_DestroyTexture};
+
     std::vector<std::unique_ptr<Utilities::NumberTexture>> pNumbers{};
 
     std::shared_ptr<Board> pBoard;
@@ -33,6 +35,8 @@ class Game {
     bool isOnPauseButton{false};
 
     bool loadNumberTextures();
+
+    bool loadText();
 
     void placeNumber(const int& number);
 
@@ -50,7 +54,7 @@ class Game {
 
 public:
 
-    Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFontMain64, const std::shared_ptr<TTF_Font> &pBoldFont, std::shared_ptr<Board> pBoard);
+    Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFontMain64, const std::shared_ptr<TTF_Font> &pBoldFont, std::shared_ptr<Board>& pBoard);
     ~Game() = default;
 
     void paint();

@@ -27,7 +27,7 @@ bool Loading::loadTexts()
     return true;
 }
 
-Loading::Loading(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFont, std::shared_ptr<Board> pBoard): pRenderer(pRenderer), pFont(pFont), pLoadingText(nullptr, &SDL_DestroyTexture), pLoadingIndicator(nullptr, &SDL_DestroyTexture), pBoard(pBoard)
+Loading::Loading(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFont, std::shared_ptr<Board>& pBoard): pRenderer(pRenderer), pFont(pFont), pLoadingText(nullptr, &SDL_DestroyTexture), pLoadingIndicator(nullptr, &SDL_DestroyTexture), pBoard(pBoard)
 {
 }
 

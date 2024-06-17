@@ -133,7 +133,7 @@ void Board::copyBoard(int NOFullCells)
     bestBoardNOFullCell = NOFullCells;
 }
 
-std::pair<bool, int> Board::removeValue(int maxNumbers, int minNumbers, std::list<std::pair<int, int>>& positionsToRemove)
+std::pair<bool, int> Board::removeValue(int maxNumbers, int minNumbers, std::vector<std::pair<int, int>>& positionsToRemove)
 {
     // size_t bestResult = positionsToRemove.size();
     std::pair<bool, int> bestResult{true, positionsToRemove.size()};
@@ -145,26 +145,28 @@ std::pair<bool, int> Board::removeValue(int maxNumbers, int minNumbers, std::lis
     }
 
     // for(std::pair<int, int> position : positionsToRemove)
-    for(auto position = positionsToRemove.begin(); position != positionsToRemove.end();)
+    for(int i = 0; i < positionsToRemove.size(); i++)
     {
         if(termianteBoardGeneration)
         {
             return bestResult;
         }
+        positionsToRemove[i].first;
+        int value = board[positionsToRemove[i].first][positionsToRemove[i].second].value;
+        board[positionsToRemove[i].first][positionsToRemove[i].second].value = 0;
 
-        int value = board[position->first][position->second].value;
-        board[position->first][position->second].value = 0;
-
-        if(isMoreThanOneSolution(*position,value))
+        if(isMoreThanOneSolution(positionsToRemove[i],value))
         {
-            board[position->first][position->second].value = value;
-            ++position;
+            board[positionsToRemove[i].first][positionsToRemove[i].second].value = value;
+
         } else
         {
             bestResult.first = false;
 
-            auto current = position++;
-            positionsToRemove.erase(current);
+            auto buffer = positionsToRemove[i];
+            positionsToRemove[i] = positionsToRemove.back();
+            positionsToRemove.pop_back();
+            // positionsToRemove.erase(current);
 
             if(positionsToRemove.size() < bestBoardNOFullCell && positionsToRemove.size() > minNumbers && positionsToRemove.size() <= maxNumbers)
             {
@@ -185,8 +187,10 @@ std::pair<bool, int> Board::removeValue(int maxNumbers, int minNumbers, std::lis
                 bestResult = result;
             }
 
-            board[position->first][position->second].value = value;
-            positionsToRemove.insert(position, *current);
+            board[positionsToRemove[i].first][positionsToRemove[i].second].value = value;
+            // positionsToRemove.insert(position, *current);
+            positionsToRemove.push_back(positionsToRemove[i]);
+            positionsToRemove[i] = buffer;
         }
     }
     if(bestResult.second < bestBoardNOFullCell && bestResult.second > minNumbers && bestResult.second <= maxNumbers)
@@ -251,25 +255,63 @@ void Board::generateBoard(DificultyLevel dificulty_level)
 {
     solveBoardRandom();
     auto fullSquares = getFullSquares();
-    std::ranges::shuffle(fullSquares.begin(), fullSquares.end(), gen);
+    std::shuffle(fullSquares.begin(), fullSquares.end(), gen);
 
-    std::list<std::pair<int, int>> fullSquaresList{fullSquares.begin(), fullSquares.end()};
     switch (dificulty_level)
     {
     case DificultyLevel::easy:{
-            removeValue(Constants::EASY_LEVEL_MAX_CLUES, Constants::MEDIUM_LEVEL_MAX_CLUES, fullSquaresList);
+            removeValue(Constants::EASY_LEVEL_MAX_CLUES, Constants::MEDIUM_LEVEL_MAX_CLUES, fullSquares);
         }
     case DificultyLevel::medium:
         {
-            removeValue(Constants::MEDIUM_LEVEL_MAX_CLUES, Constants::HARD_LEVEL_MAX_CLUES,fullSquaresList);
+            removeValue(Constants::MEDIUM_LEVEL_MAX_CLUES, Constants::HARD_LEVEL_MAX_CLUES,fullSquares);
         }
     case DificultyLevel::hard:
         {
-            removeValue(Constants::HARD_LEVEL_MAX_CLUES, 0, fullSquaresList);
+            removeValue(Constants::HARD_LEVEL_MAX_CLUES, 0, fullSquares);
         }
     }
 
     isBoardGenerationFinished = true;
+}
+
+void Board::checkBoard()
+{
+    isBoardCorrect = true;
+    for(int i = 0; i < 9; i++)
+    {
+        for(int j =0; j < 9; j++)
+        {
+            if(board[i][j].value == 0)
+            {
+                isBoardCorrect = false;
+                continue;
+            }
+            int buf = board[i][j].value;
+            board[i][j].value = 0;
+            if(!isSafe(buf, std::make_pair(i,j)))
+            {
+                isBoardCorrect = false;
+                if(board[i][j].type == Square::User)
+                {
+                    board[i][j].type = Square::UserFault;
+                } else if (board[i][j].type == Square::Program)
+                {
+                    board[i][j].type = Square::ProgramFault;
+                }
+            } else
+            {
+                if(board[i][j].type == Square::UserFault)
+                {
+                    board[i][j].type = Square::User;
+                } else if (board[i][j].type == Square::ProgramFault)
+                {
+                    board[i][j].type = Square::Program;
+                }
+            }
+            board[i][j].value = buf;
+        }
+    }
 }
 
 
@@ -281,9 +323,16 @@ Square Board::getSquare(const int& row, const int& column) const
     return board[row][column];
 }
 
-void Board::setSquare(const int& number, const int& row, const int& column)
+void Board::setSquare(const int& number, const Square::Type& type, const int& row, const int& column)
 {
+    if(board[row][column].type == Square::Type::Program || board[row][column].type == Square::Type::ProgramFault)
+    {
+        return;
+    }
     board[row][column].value = number;
+    board[row][column].type = type;
+    checkBoard();
+
 }
 
 bool Board::solveBoardRandom()
@@ -294,7 +343,7 @@ bool Board::solveBoardRandom()
         return true;
     }
     std::vector<int> numbersQueue = NUMBERS;
-    std::ranges::shuffle(numbersQueue.begin(), numbersQueue.end(), gen);
+    std::shuffle(numbersQueue.begin(), numbersQueue.end(), gen);
     for (int& number : numbersQueue)
     {
         if(!isSafe(number, cordsOfEmptyCell))
@@ -379,8 +428,19 @@ bool Board::hasBoardGenerationEnded()
             for(int j = 0; j < 9; j++)
             {
                 board[i][j].value = bestBoard[i][j];
+
             }
         }
+        }
+        for(int i = 0; i < 9; i++)
+        {
+            for(int j = 0; j < 9; j++)
+            {
+                if(bestBoard[i][j]!=0)
+                {
+                    board[i][j].type = Square::Program;
+                }
+            }
         }
         return true;
     }

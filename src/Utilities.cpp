@@ -137,35 +137,39 @@ Utilities::NumberTexture::NumberTexture(const int& number, const std::shared_ptr
                                         const std::shared_ptr<TTF_Font>& pBoldFont,
                                         const std::shared_ptr<SDL_Renderer>& pRenderer)
 {
-    pUserTexture = generateTextTexture(std::to_string(number), Constants::GAME_NUMBER_COLOR, pFont,
+    pUserTexture = generateTextTexture(std::to_string(number), Constants::GAME_BOARD_USER_NUMBER_COLOR, pFont,
                                                   pRenderer);
-    pUserFaultTexture = generateTextTexture(std::to_string(number), Constants::GAME_NUMBER_ERROR_COLOR,
+    pUserFaultTexture = generateTextTexture(std::to_string(number), Constants::GAME_BOARD_USER_NUMBER_ERROR_COLOR,
                                                        pFont, pRenderer);
-    pProgramTexture = generateTextTexture(std::to_string(number), Constants::GAME_NUMBER_COLOR, pBoldFont,
+    pProgramTexture = generateTextTexture(std::to_string(number), Constants::GAME_BOARD_PROGRAM_NUMBER_COLOR, pBoldFont,
                                                      pRenderer);
-    pProgramFaultTexture = generateTextTexture(std::to_string(number), Constants::GAME_NUMBER_ERROR_COLOR,
+    pProgramFaultTexture = generateTextTexture(std::to_string(number), Constants::GAME_BOARD_PROGRAM_NUMBER_ERROR_COLOR,
                                                           pBoldFont, pRenderer);
 }
 
-Utilities::TextureUniPtr& Utilities::NumberTexture::operator[](const NumberTextureVersion& version)
+Utilities::TextureUniPtr& Utilities::NumberTexture::operator[](const Square::Type& version)
 {
     switch (version)
     {
-    case NumberTextureVersion::User:
+    case Square::Type::User:
         {
             return pUserTexture;
         }
-    case NumberTextureVersion::UserFault:
+    case Square::Type::UserFault:
         {
             return pUserFaultTexture;
         }
-    case NumberTextureVersion::Program:
+    case Square::Type::Program:
         {
             return pProgramTexture;
         }
-    case NumberTextureVersion::ProgramFault:
+    case Square::Type::ProgramFault:
         {
             return pProgramFaultTexture;
+        }
+    case Square::Type::None:
+        {
+            std::__throw_range_error("None should not be used!!!");
         }
     }
     return pUserTexture;
