@@ -11,11 +11,11 @@
 #include <iostream>
 
 Game::Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFont,
-           const std::shared_ptr<TTF_Font>& pBoldFont) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont),
-            board(Board::DificultyLevel::hard)
+           const std::shared_ptr<TTF_Font>& pBoldFont, std::shared_ptr<Board> pBoard) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont), pBoard(pBoard)
 {
     loadNumberTextures();
 }
+
 
 void Game::paint()
 {
@@ -101,7 +101,7 @@ void Game::placeNumber(const int& number)
 {
     if(selectedSquare.first != -1)
     {
-        board.setSquare(number, selectedSquare.second, selectedSquare.first);
+        pBoard->setSquare(number, selectedSquare.second, selectedSquare.first);
     }
 }
 
@@ -274,12 +274,12 @@ void Game::paintNumbers()
     {
         for (int column = 0; column < 9; column++)
         {
-            if((board.getSquare(row,column).value) != 0 )
+            if((pBoard->getSquare(row,column).value) != 0 )
             {
             numberRect.x = Constants::GAME_BOARD_RECT.x + column * 56 + 25 + (int)std::floor(column / 3) * 3;
             numberRect.y = Constants::GAME_BOARD_RECT.y + row * 56 + 20 + (int)std::floor(row / 3) * 3;
             SDL_RenderCopy(pRenderer.get(),
-                           (*pNumbers[(board.getSquare(row,column).value) - 1])[Utilities::NumberTextureVersion::Program].get(),
+                           (*pNumbers[(pBoard->getSquare(row,column).value) - 1])[Utilities::NumberTextureVersion::Program].get(),
                            nullptr, &numberRect);
             }
         }

@@ -26,7 +26,7 @@ class Game {
 
     std::vector<std::unique_ptr<Utilities::NumberTexture>> pNumbers{};
 
-    Board board;
+    std::shared_ptr<Board> pBoard;
 
     std::pair<int, int> selectedSquare{-1,-1};
 
@@ -50,7 +50,7 @@ class Game {
 
 public:
 
-    Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFontMain64, const std::shared_ptr<TTF_Font> &pBoldFont);
+    Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFontMain64, const std::shared_ptr<TTF_Font> &pBoldFont, std::shared_ptr<Board> pBoard);
     ~Game() = default;
 
     void paint();

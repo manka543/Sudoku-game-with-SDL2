@@ -6,6 +6,7 @@
 #define PROJECT_NAME_PROGRAMCONSTANTS_H
 
 #include <string_view>
+#include <SDL2/SDL.h>
 
 class Constants
 {
@@ -31,9 +32,21 @@ public:
     static constexpr char MAIN_MENU_QUIT_TEXT[] = "QUIT";
     static constexpr SDL_Rect MAIN_MENU_QUIT_POSITION{245, 400, 230, 100};
 
+    static constexpr char MAIN_MENU_EASY_LEVEL_TEXT[] = "EASY";
+    static constexpr SDL_Rect MAIN_MENU_EASY_LEVEL_POSITION{245, 270, 225, 100};
+    static constexpr char MAIN_MENU_MEDIUM_LEVEL_TEXT[] = "MEDIUM";
+    static constexpr SDL_Rect MAIN_MENU_MEDIUM_LEVEL_POSITION{190, 370, 340, 100};
+    static constexpr char MAIN_MENU_HARD_LEVEL_TEXT[] = "HARD";
+    static constexpr SDL_Rect MAIN_MENU_HARD_LEVEL_POSITION{245, 470, 225, 100};
+
     static constexpr char MAIN_MENU_POINTER_TEXT[] = "->";
     static constexpr SDL_Rect MAIN_MENU_POINTER_POSITION_PLAY{180, 250, 60, 100};
     static constexpr SDL_Rect MAIN_MENU_POINTER_POSITION_QUIT{180, 400, 60, 100};
+
+    static constexpr char LOADING_TEXT[] = "Loading board";
+    static constexpr SDL_Rect LOADING_TEXT_POSITION{100,300,400,100};
+    static constexpr char LOADING_INDICATOR_SIGN[] = ".";
+    static constexpr SDL_Rect FIRST_LOADING_INDICATOR_SIGN_POSITION{515,385,15,15};
 
 #ifdef __linux__
     static constexpr char FONT_MAIN_PATH[] = R"(assets/fonts/Lato-Black.ttf)";
@@ -46,6 +59,7 @@ public:
     static constexpr int FONT_MAIN_SIZE_64{288};
     static constexpr int FONT_SIZE_100{100};
 
+    static constexpr SDL_Rect GAME_TITLE_TEXT_POSITION{75,5,70,150};
 
     static constexpr SDL_Color GAME_BOARD_BACKGROUND_COLOR{0x12, 0x14, 0x81, 0xff};
     static constexpr SDL_Color GAME_BOARD_OUTER_FRAME_COLOR{0x1e, 0x03, 0x42, 0xff};
@@ -66,6 +80,7 @@ public:
     static constexpr SDL_Rect GAME_SET_NUMBER_BOARD_RECT{77,658,566,62};
 
     static constexpr SDL_Rect GAME_PAUSE_BUTTON_HITBOX{0,0,60,60};
+
 
     static constexpr int EASY_LEVEL_MAX_CLUES{46};
     static constexpr int MEDIUM_LEVEL_MAX_CLUES{35};

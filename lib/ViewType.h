@@ -6,7 +6,8 @@
 #define VIEWTYPE_H
 
 enum class ViewType : int {
-    MAIN_MENU = 0,
+    MAIN_MENU,
+    LOADING,
     GAME,
     GAME_ESCAPE,
     QUIT,

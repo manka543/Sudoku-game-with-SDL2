@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "Square.h"
 #include <chrono>
+#include <Constants.h>
 #include <iostream>
 
 
@@ -23,7 +24,7 @@ std::pair<int, int> Board::getFirstEmptyCell()
     return std::make_pair<int, int>(-1,-1);
 }
 
-bool Board::isSafe(const int& number, const std::pair<int, int>& coords) const
+bool Board::isSafe(const int& number, const std::pair<int, int>& coords)
 {
     for (const Square& square : board[coords.first])
     {
@@ -120,40 +121,79 @@ void Board::reset()
     }
 }
 
-int Board::removeValue(int maxNumbers, std::list<std::pair<int, int>>& positionsToRemove)
+void Board::copyBoard(int NOFullCells)
 {
-    size_t bestResult = positionsToRemove.size();
-    // for(std::pair<int, int> position : positionsToRemove)
-    for(auto position = positionsToRemove.begin(); position != positionsToRemove.end(); ++position)
+    for(int i = 0; i< 9; i++)
     {
+        for(int j= 0; j< 9; j++)
+        {
+            bestBoard[i][j] = board[i][j].value;
+        }
+    }
+    bestBoardNOFullCell = NOFullCells;
+}
+
+std::pair<bool, int> Board::removeValue(int maxNumbers, int minNumbers, std::list<std::pair<int, int>>& positionsToRemove)
+{
+    // size_t bestResult = positionsToRemove.size();
+    std::pair<bool, int> bestResult{true, positionsToRemove.size()};
+
+    if(positionsToRemove.size() <= minNumbers)
+    {
+        bestResult.first = false;
+        return bestResult;
+    }
+
+    // for(std::pair<int, int> position : positionsToRemove)
+    for(auto position = positionsToRemove.begin(); position != positionsToRemove.end();)
+    {
+        if(termianteBoardGeneration)
+        {
+            return bestResult;
+        }
 
         int value = board[position->first][position->second].value;
         board[position->first][position->second].value = 0;
 
         if(isMoreThanOneSolution(*position,value))
         {
-            if(positionsToRemove.size() <= maxNumbers)
-            {
-                board[position->first][position->second].value = value;
-                continue;
-            }
+            board[position->first][position->second].value = value;
+            ++position;
         } else
         {
-            positionsToRemove.erase(position);
-            int result = removeValue(maxNumbers, positionsToRemove);
-            if(result < bestResult)
+            bestResult.first = false;
+
+            auto current = position++;
+            positionsToRemove.erase(current);
+
+            if(positionsToRemove.size() < bestBoardNOFullCell && positionsToRemove.size() > minNumbers && positionsToRemove.size() <= maxNumbers)
+            {
+                copyBoard(static_cast<int>(positionsToRemove.size()));
+            }
+
+            // positionsToRemove.erase(position);
+
+            auto result = removeValue(maxNumbers, minNumbers, positionsToRemove);
+            if(result.first == true && result.second >= minNumbers && result.second <= maxNumbers)
+            {
+                // positionsToRemove.insert(position, *current);
+                // positionsToRemove.insert(position, *position);
+                copyBoard(static_cast<int>(positionsToRemove.size()));
+                return result;
+            } if(result.second < bestResult.second)
             {
                 bestResult = result;
             }
-            if(result < maxNumbers)
-            {
-                return result;
-            }
+
             board[position->first][position->second].value = value;
-            positionsToRemove.insert(position, *position);
+            positionsToRemove.insert(position, *current);
         }
     }
-    return static_cast<int>(bestResult);
+    if(bestResult.second < bestBoardNOFullCell && bestResult.second > minNumbers && bestResult.second <= maxNumbers)
+    {
+        copyBoard(static_cast<int>(positionsToRemove.size()));
+    }
+    return bestResult;
 }
 
 bool Board::isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int lastDeletedNumber)
@@ -171,6 +211,10 @@ bool Board::isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int l
 
     for(int num : possibilities)
     {
+        if(termianteBoardGeneration)
+        {
+            return false;
+        }
         if(num == lastDeletedNumber)
         {
             continue;
@@ -197,58 +241,40 @@ std::vector<std::pair<int, int>> Board::getFullSquares()
     {
         for(int j = 0; j < 9; j++)
         {
-            positions.emplace_back(std::make_pair(i,j));
+            positions.emplace_back(i,j);
         }
     }
     return positions;
 }
 
-
-Board::Board(const DificultyLevel& dificultyLevel)
+void Board::generateBoard(DificultyLevel dificulty_level)
 {
-    // Get the starting point
-    auto start = std::chrono::high_resolution_clock::now();
+    solveBoardRandom();
+    auto fullSquares = getFullSquares();
+    std::ranges::shuffle(fullSquares.begin(), fullSquares.end(), gen);
 
-    // Call the function to be timed
-    // for(int i = 0; i < 10; i++)
-    // {
-    //     reset();
-    //     auto possibilities = getEmptySquares();
-    //     solveBoardFast(possibilities);
-    // }
-
-    // Get the ending point
-    auto end = std::chrono::high_resolution_clock::now();
-
-    // Calculate the duration
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-    // Output the duration
-    std::cout << "myFunction() took " << duration.count() << " milliseconds." << std::endl;
-    // Get the starting point
-    start = std::chrono::high_resolution_clock::now();
-
-    // Call the function to be timed
-    // for(int i = 0; i < 10; i++)
+    std::list<std::pair<int, int>> fullSquaresList{fullSquares.begin(), fullSquares.end()};
+    switch (dificulty_level)
     {
-        solveBoardRandom();
-        auto fullSquares = getFullSquares();
-        std::ranges::shuffle(fullSquares.begin(), fullSquares.end(), gen);
-        std::list<std::pair<int, int>> fullSquaresList{fullSquares.begin(), fullSquares.end()};
-
-        removeValue(60, fullSquaresList);
+    case DificultyLevel::easy:{
+            removeValue(Constants::EASY_LEVEL_MAX_CLUES, Constants::MEDIUM_LEVEL_MAX_CLUES, fullSquaresList);
+        }
+    case DificultyLevel::medium:
+        {
+            removeValue(Constants::MEDIUM_LEVEL_MAX_CLUES, Constants::HARD_LEVEL_MAX_CLUES,fullSquaresList);
+        }
+    case DificultyLevel::hard:
+        {
+            removeValue(Constants::HARD_LEVEL_MAX_CLUES, 0, fullSquaresList);
+        }
     }
 
-
-    // Get the ending point
-    end = std::chrono::high_resolution_clock::now();
-
-    // Calculate the duration
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-    // Output the duration
-    std::cout << "myFunction() took " << duration.count() << " milliseconds." << std::endl;
+    isBoardGenerationFinished = true;
 }
+
+
+Board::Board(){}
+
 
 Square Board::getSquare(const int& row, const int& column) const
 {
@@ -298,6 +324,10 @@ bool Board::solveBoardFast(std::vector<std::pair<std::pair<int, int>, std::vecto
 
     for (int& number : square.second)
     {
+        if(termianteBoardGeneration)
+        {
+            return false;
+        }
         if(!isSafe(number, square.first))
         {
             continue;
@@ -312,4 +342,53 @@ bool Board::solveBoardFast(std::vector<std::pair<std::pair<int, int>, std::vecto
     board[square.first.first][square.first.second].value = 0;
     emptySquares.push_back(square);
     return false;
+}
+
+bool Board::hasBoardGenerationEnded()
+{
+    bool isDifficultyGoodEnough{false};
+    switch (dificultyLevel)
+    {
+    case DificultyLevel::easy:
+        {
+            isDifficultyGoodEnough = bestBoardNOFullCell <= Constants::EASY_LEVEL_MAX_CLUES && bestBoardNOFullCell>=Constants::MEDIUM_LEVEL_MAX_CLUES;
+            break;
+        }
+    case DificultyLevel::medium:
+        {
+            isDifficultyGoodEnough = bestBoardNOFullCell <= Constants::MEDIUM_LEVEL_MAX_CLUES && bestBoardNOFullCell>=Constants::HARD_LEVEL_MAX_CLUES;
+            break;
+        }
+    case DificultyLevel::hard:
+        {
+            // isDifficultyGoodEnough = bestBoardNOFullCell <= Constants::HARD_LEVEL_MAX_CLUES;
+            isDifficultyGoodEnough = bestBoardNOFullCell <25;
+            break;
+        }
+    }
+
+    if(isBoardGenerationFinished || isDifficultyGoodEnough)
+    {
+        termianteBoardGeneration = true;
+        std::cout<<boardGeneration.joinable();
+        boardGeneration.join();
+        if(!isBoardGenerationFinished)
+        {
+        for(int i = 0; i < 9; i++)
+        {
+            for(int j = 0; j < 9; j++)
+            {
+                board[i][j].value = bestBoard[i][j];
+            }
+        }
+        }
+        return true;
+    }
+    return false;
+}
+
+void Board::runBoardGeneration(DificultyLevel dificultyLevel)
+{
+    this->dificultyLevel = dificultyLevel;
+    boardGeneration = std::thread(&Board::generateBoard, this, dificultyLevel);
 }

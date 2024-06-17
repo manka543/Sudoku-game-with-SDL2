@@ -14,9 +14,13 @@
 #include "Game.h"
 #include <memory>
 
+#include "Loading.h"
+
 class Painter {
 
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> pWindow;
+
+    std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pTitleText;
 
     int createWindow();
 
@@ -24,10 +28,14 @@ class Painter {
 
     bool loadFonts();
 
+    bool loadTextures();
+
 public:
     std::weak_ptr<MainMenu> pMainMenu;
 
     std::shared_ptr<Game> pGame;
+
+    std::shared_ptr<Loading> pLoading;
 
     std::shared_ptr<SDL_Renderer> pRenderer;
 
@@ -45,9 +53,13 @@ public:
 
     void paintGame();
 
+    void paintLoading();
+
     void setMainMenu(std::shared_ptr<MainMenu>& pMainMenu);
 
     void setGame(std::shared_ptr<Game>& pGame);
+
+    void setLoading(std::shared_ptr<Loading>& pLoading);
 
 };
 

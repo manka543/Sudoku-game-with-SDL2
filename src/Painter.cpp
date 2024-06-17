@@ -7,11 +7,12 @@
 #include "ErrorMessages.h"
 
 
-Painter::Painter():pWindow(nullptr, SDL_DestroyWindow) {
+Painter::Painter():pWindow(nullptr, &SDL_DestroyWindow), pTitleText(nullptr, &SDL_DestroyTexture) {
 
     if (!createWindow()
         || !createRenderer()
         || !loadFonts()
+        || !loadTextures()
         ) {
         isSuccessfullyInitialized = false;
     }
@@ -59,7 +60,7 @@ void Painter::paintMainMenu() {
                            Constants::BACKGROUND_COLOR.b, Constants::BACKGROUND_COLOR.a);
 
     SDL_RenderClear(pRenderer.get());
-
+    SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::MAIN_MENU_TITLE_POSITION);
     auto pMainMenuCP = pMainMenu.lock();
     pMainMenuCP->paint();
 
@@ -94,9 +95,26 @@ bool Painter::loadFonts() {
     return true;
 }
 
+bool Painter::loadTextures()
+{
+    pTitleText = Utilities::generateTextTexture(Constants::MAIN_MENU_TITLE_TEXT, Constants::MAIN_MENU_TITLE_TEXT_COLOR,
+                                                pFontMain64, pRenderer);
+    if (pTitleText == nullptr)
+    {
+        return false;
+    }
+    return true;
+}
+
 void Painter::setGame(std::shared_ptr<Game> &pGame) {
     this->pGame = pGame;
 }
+
+void Painter::setLoading(std::shared_ptr<Loading>& pLoading)
+{
+    this->pLoading = pLoading;
+}
+
 
 void Painter::paintGame() {
     SDL_SetRenderDrawColor(pRenderer.get(), Constants::BACKGROUND_COLOR.r, Constants::BACKGROUND_COLOR.g,
@@ -104,7 +122,23 @@ void Painter::paintGame() {
 
     SDL_RenderClear(pRenderer.get());
 
+    SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::GAME_TITLE_TEXT_POSITION);
+
     pGame->paint();
+
+    SDL_RenderPresent(pRenderer.get());
+}
+
+void Painter::paintLoading()
+{
+    SDL_SetRenderDrawColor(pRenderer.get(), Constants::BACKGROUND_COLOR.r, Constants::BACKGROUND_COLOR.g,
+                           Constants::BACKGROUND_COLOR.b, Constants::BACKGROUND_COLOR.a);
+
+    SDL_RenderClear(pRenderer.get());
+
+    SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::MAIN_MENU_TITLE_POSITION);
+
+    pLoading->paint();
 
     SDL_RenderPresent(pRenderer.get());
 }
