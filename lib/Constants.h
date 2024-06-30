@@ -6,7 +6,7 @@
 #define PROJECT_NAME_PROGRAMCONSTANTS_H
 
 #include <string_view>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 class Constants
 {
@@ -59,7 +59,7 @@ public:
     static constexpr int FONT_MAIN_SIZE_64{288};
     static constexpr int FONT_SIZE_100{100};
 
-    static constexpr SDL_Rect GAME_TITLE_TEXT_POSITION{75,5,70,150};
+    static constexpr SDL_Rect GAME_TITLE_TEXT_POSITION{75,5,180,70};
 
     static constexpr SDL_Color GAME_BOARD_BACKGROUND_COLOR{0x12, 0x14, 0x81, 0xff};
     static constexpr SDL_Color GAME_BOARD_OUTER_FRAME_COLOR{0x1e, 0x03, 0x42, 0xff};
@@ -84,7 +84,7 @@ public:
     static constexpr SDL_Rect GAME_PAUSE_BUTTON_HITBOX{0,0,60,60};
 
     static constexpr char GAME_WON_TEXT[] = "You won!!!";
-    static constexpr SDL_Rect GAME_WON_TEXT_POSITION{150,635,250,60};
+    static constexpr SDL_Rect GAME_WON_TEXT_POSITION{280,20,250,60};
 
 
     static constexpr int EASY_LEVEL_MAX_CLUES{46};

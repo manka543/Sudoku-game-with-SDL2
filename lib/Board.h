@@ -56,7 +56,7 @@ private:
 
     std::pair<bool, int> removeValue(int maxNumbers, int minNumbers, std::vector<std::pair<int, int>>& positionsToRemove);
 
-    bool isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int lastDeletedNumber);
+    bool isMoreThanOneSolution(const std::pair<int, int>& lastDeletedPosition, int lastDeletedNumber);
 
     std::vector<std::pair<int, int>> getFullSquares();
 

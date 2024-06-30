@@ -200,7 +200,7 @@ std::pair<bool, int> Board::removeValue(int maxNumbers, int minNumbers, std::vec
     return bestResult;
 }
 
-bool Board::isMoreThanOneSolution(std::pair<int, int> lastDeletedPosition, int lastDeletedNumber)
+bool Board::isMoreThanOneSolution(const std::pair<int, int>& lastDeletedPosition, int lastDeletedNumber)
 {
     auto emptySquares = getEmptySquares();
     std::vector<int> possibilities;
@@ -272,6 +272,16 @@ void Board::generateBoard(DificultyLevel dificulty_level)
         }
     }
 
+    // for(int i = 0; i < 9; i++)
+    // {
+    //     for(int j = 0; j < 9; j++)
+    //     {
+    //         if(bestBoard[i][j] != 0)
+    //         {
+    //             board[i][j].type = Square::Program;
+    //         }
+    //     }
+    // }
     isBoardGenerationFinished = true;
 }
 
@@ -421,7 +431,7 @@ bool Board::hasBoardGenerationEnded()
         termianteBoardGeneration = true;
         std::cout<<boardGeneration.joinable();
         boardGeneration.join();
-        if(!isBoardGenerationFinished)
+        // if(!isBoardGenerationFinished)
         {
         for(int i = 0; i < 9; i++)
         {
@@ -432,11 +442,12 @@ bool Board::hasBoardGenerationEnded()
             }
         }
         }
+
         for(int i = 0; i < 9; i++)
         {
             for(int j = 0; j < 9; j++)
             {
-                if(bestBoard[i][j]!=0)
+                if(board[i][j].value != 0)
                 {
                     board[i][j].type = Square::Program;
                 }
