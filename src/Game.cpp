@@ -11,7 +11,7 @@
 #include <iostream>
 
 Game::Game(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFont,
-           const std::shared_ptr<TTF_Font>& pBoldFont, std::shared_ptr<Board>& pBoard) : pRenderer(pRenderer), pFont(pFont), pBoldFont(pBoldFont), pBoard(pBoard)
+           const std::shared_ptr<TTF_Font>& pBoldFont, std::shared_ptr<Board>& pBoard) : Paintable(pRenderer, pFont), pBoldFont(pBoldFont), pBoard(pBoard)
 {
     loadNumberTextures();
     loadText();

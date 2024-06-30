@@ -18,7 +18,7 @@ protected:
 
 public:
 
-    Paintable(const std::shared_ptr<SDL_Renderer>& pRenderer);
+    Paintable(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFont);
     virtual ~Paintable() = default;
 
     virtual void paint() = 0;

@@ -12,20 +12,20 @@
 #include <ViewType.h>
 
 #include "Board.h"
+#include "Paintable.h"
 
-
-class Loading {
+class Loading : public Paintable {
 
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pLoadingText;
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pLoadingIndicator;
 
-    std::shared_ptr<SDL_Renderer> pRenderer;
+//    std::shared_ptr<SDL_Renderer> pRenderer;
 
     std::shared_ptr<Board> pBoard;
 
     bool loadTexts();
 
-    std::shared_ptr<TTF_Font> pFont;
+//    std::shared_ptr<TTF_Font> pFont;
 
     int indicatorStatus = 1;
 

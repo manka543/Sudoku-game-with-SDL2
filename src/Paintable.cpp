@@ -5,6 +5,6 @@
 #include "Paintable.h"
 
 
-Paintable::Paintable(const std::shared_ptr<SDL_Renderer>& pRenderer) : pRenderer(pRenderer)
+Paintable::Paintable(const std::shared_ptr<SDL_Renderer>& pRenderer, const std::shared_ptr<TTF_Font>& pFont) : pRenderer(pRenderer), pFont(pFont)
 {
 }

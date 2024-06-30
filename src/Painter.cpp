@@ -55,23 +55,10 @@ int Painter::createRenderer() {
     return 1;
 }
 
-void Painter::paintMainMenu() {
-    SDL_SetRenderDrawColor(pRenderer.get(), Constants::BACKGROUND_COLOR.r, Constants::BACKGROUND_COLOR.g,
-                           Constants::BACKGROUND_COLOR.b, Constants::BACKGROUND_COLOR.a);
-
-    SDL_RenderClear(pRenderer.get());
-    SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::MAIN_MENU_TITLE_POSITION);
-    auto pMainMenuCP = pMainMenu.lock();
-    pMainMenuCP->paint();
-
-    SDL_RenderPresent(pRenderer.get());
-}
 
 
 
-void Painter::setMainMenu(std::shared_ptr<MainMenu>& pMainMenu) {
-    this->pMainMenu = pMainMenu;
-}
+
 
 bool Painter::loadFonts() {
 
@@ -106,39 +93,21 @@ bool Painter::loadTextures()
     return true;
 }
 
-void Painter::setGame(std::shared_ptr<Game> &pGame) {
-    this->pGame = pGame;
-}
-
-void Painter::setLoading(std::shared_ptr<Loading>& pLoading)
-{
-    this->pLoading = pLoading;
-}
-
-
-void Painter::paintGame() {
+void Painter::paint(Paintable* pPaintable) {
     SDL_SetRenderDrawColor(pRenderer.get(), Constants::BACKGROUND_COLOR.r, Constants::BACKGROUND_COLOR.g,
                            Constants::BACKGROUND_COLOR.b, Constants::BACKGROUND_COLOR.a);
 
     SDL_RenderClear(pRenderer.get());
 
-    SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::GAME_TITLE_TEXT_POSITION);
+    if(dynamic_cast<MainMenu*>(pPaintable) != nullptr){
+        SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::MAIN_MENU_TITLE_POSITION);
+    } else if (dynamic_cast<Game*>(pPaintable) != nullptr){
+        SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::GAME_TITLE_TEXT_POSITION);
+    } else if (dynamic_cast<Loading*>(pPaintable) != nullptr){
+        SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::MAIN_MENU_TITLE_POSITION);
+    }
 
-    pGame->paint();
-
-    SDL_RenderPresent(pRenderer.get());
-}
-
-void Painter::paintLoading()
-{
-    SDL_SetRenderDrawColor(pRenderer.get(), Constants::BACKGROUND_COLOR.r, Constants::BACKGROUND_COLOR.g,
-                           Constants::BACKGROUND_COLOR.b, Constants::BACKGROUND_COLOR.a);
-
-    SDL_RenderClear(pRenderer.get());
-
-    SDL_RenderCopy(pRenderer.get(), pTitleText.get(), nullptr, &Constants::MAIN_MENU_TITLE_POSITION);
-
-    pLoading->paint();
+    pPaintable->paint();
 
     SDL_RenderPresent(pRenderer.get());
 }

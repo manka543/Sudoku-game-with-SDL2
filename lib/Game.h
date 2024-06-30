@@ -12,16 +12,17 @@
 #include "Board.h"
 #include "ViewType.h"
 #include "Utilities.h"
+#include "Paintable.h"
 
-class Game {
+class Game : public Paintable {
 
     enum class Direction : int {
     left, right, up, down
     };
 
-    std::shared_ptr<SDL_Renderer> pRenderer;
+//    std::shared_ptr<SDL_Renderer> pRenderer;
 
-    std::shared_ptr<TTF_Font> pFont;
+//    std::shared_ptr<TTF_Font> pFont;
     std::shared_ptr<TTF_Font> pBoldFont;
 
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pGameWonText{nullptr, &SDL_DestroyTexture};

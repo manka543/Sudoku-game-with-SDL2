@@ -11,8 +11,7 @@
 #include <iostream>
 
 
-MainMenu::MainMenu(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64) : pRenderer(
-        pRenderer), pFont(pFontMain64)
+MainMenu::MainMenu(std::shared_ptr<SDL_Renderer>& pRenderer, std::shared_ptr<TTF_Font>& pFontMain64) : Paintable(pRenderer, pFontMain64)
 {
     loadTexts();
 }

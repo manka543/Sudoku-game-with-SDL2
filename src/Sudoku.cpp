@@ -27,17 +27,11 @@ Sudoku::Sudoku()
         return;
     }
 
-    pPainter->setMainMenu(pMainMenu);
-
     pBoard = std::make_shared<Board>();
 
     pGame = std::make_shared<Game>(pPainter->pRenderer, pPainter->pFontMain64, pPainter->pFontBold100, pBoard);
 
-    pPainter->setGame(pGame);
-
     pLoading = std::make_shared<Loading>(pPainter->pRenderer, pPainter->pFontMain64, pBoard);
-
-    pPainter->setLoading(pLoading);
 
     mainLoop();
 }
@@ -81,13 +75,13 @@ void Sudoku::mainLoop()
         {
         case ViewType::MAIN_MENU:
             {
-                pPainter->paintMainMenu();
+                pPainter->paint(pMainMenu.get());
                 break;
             }
         case ViewType::LOADING:
             {
                 currentView = pLoading->checkLoading();
-                pPainter->paintLoading();
+                pPainter->paint(pLoading.get());
                 break;
             }
         case ViewType::QUIT:
@@ -96,7 +90,7 @@ void Sudoku::mainLoop()
             }
         case ViewType::GAME:
             {
-                pPainter->paintGame();
+                pPainter->paint(pGame.get());
                 break;
             }
         case ViewType::GAME_ESCAPE:

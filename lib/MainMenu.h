@@ -10,8 +10,9 @@
 #include <ViewType.h>
 #include <memory>
 #include <Board.h>
+#include "Paintable.h"
 
-class MainMenu {
+class MainMenu : public Paintable {
 
     enum class MenuOption : int {
         NONE = 0,
@@ -39,11 +40,11 @@ class MainMenu {
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> pHardLevelText{nullptr, &SDL_DestroyTexture};
 
 
-    std::shared_ptr<TTF_Font> pFont;
+//    std::shared_ptr<TTF_Font> pFont;
 
     MenuOption selectedOption = MenuOption::NONE;
 
-    std::shared_ptr<SDL_Renderer> pRenderer;
+//    std::shared_ptr<SDL_Renderer> pRenderer;
 
     MenuState state{MenuState::MAIN_SCREEN};
 
@@ -56,7 +57,7 @@ public:
     void paintMainScreen();
     void paintDificultyLevelSelection();
 
-    ~MainMenu() = default;
+    ~MainMenu() override = default;
 
     bool isSuccessfullyInitialized{true};
 

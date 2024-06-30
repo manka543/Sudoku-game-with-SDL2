@@ -31,11 +31,6 @@ class Painter {
     bool loadTextures();
 
 public:
-    std::weak_ptr<MainMenu> pMainMenu;
-
-    std::shared_ptr<Game> pGame;
-
-    std::shared_ptr<Loading> pLoading;
 
     std::shared_ptr<SDL_Renderer> pRenderer;
 
@@ -49,17 +44,7 @@ public:
 
     bool isSuccessfullyInitialized{true};
 
-    void paintMainMenu();
-
-    void paintGame();
-
-    void paintLoading();
-
-    void setMainMenu(std::shared_ptr<MainMenu>& pMainMenu);
-
-    void setGame(std::shared_ptr<Game>& pGame);
-
-    void setLoading(std::shared_ptr<Loading>& pLoading);
+    void paint(Paintable* paintable);
 
 };
 
