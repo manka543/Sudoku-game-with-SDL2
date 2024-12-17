@@ -1,0 +1,160 @@
+<h1 id="sudoku-game-with-sdl2-project-documentation">Sudoku Game with SDL2 Project Documentation</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This project allows users to play Sudoku at various difficulty levels. The application generates random boards using a simple backtracking algorithm and is built using Simple DirectMedia Layer 2 (SDL2) for the user interface.</p>
+<h2 id="requirements">Requirements</h2>
+<p>The Sudoku game with SDL2 offers basic functionalities for gameplay. Users begin at the Main Menu, which includes options to &#39;Play&#39; or &#39;Quit&#39;. Upon selecting &#39;Play&#39;, users choose a difficulty level from easy, medium, or hard. The board generation time varies based on the selected difficulty, computer capabilities, and the randomness of the shuffled board. Typically, easy and medium difficulty boards generate almost instantly, while hard boards may take a few extra seconds to complete.</p>
+<h2 id="project-structure">Project Structure</h2>
+<p>This project is structured to develop a Sudoku game application using C++ and SDL (Simple DirectMedia Layer) for graphics rendering. Key components include:</p>
+<ul>
+    <li><p>Main Modules:</p>
+        <ul>
+            <li>Constants: Defines game constants such as colors, text, and positions.</li>
+            <li>Utilities: Provides utility functions for text rendering and other common tasks.</li>
+            <li>ViewType: Enumerates different views/screens of the game.</li>
+        </ul>
+    </li>
+    <li><p>Game Logic:</p>
+        <ul>
+            <li>Square: Represents individual cells on the Sudoku board with value and type attributes.</li>
+            <li>Board: Manages the Sudoku board, including puzzle generation, solution validation, and user interactions.</li>
+            <li>Loading: Implements a loading screen with animated indicators while the game initializes.</li>
+        </ul>
+    </li>
+    <li><p>Graphics and Rendering:</p>
+        <ul>
+            <li>SDL: Utilizes SDL library for graphics rendering and event handling.</li>
+            <li>SDL_ttf: Integrates SDL_ttf for rendering text on the screen.</li>
+        </ul>
+    </li>
+    <li><p>Concurrency:</p>
+        <ul>
+            <li>Uses std::thread for concurrent board generation, ensuring smooth gameplay without blocking the main thread.</li>
+        </ul>
+    </li>
+    <li><p>Gameplay Flow:</p>
+        <ul>
+            <li>Main Loop: Controls the flow of the game, transitioning between loading screens and gameplay views based on game state.
+                This project structure facilitates the development of a functional and interactive Sudoku game application in C++, leveraging SDL for graphical output and user interaction.</li>
+        </ul>
+    </li>
+</ul>
+<h3 id="sudoku">Sudoku</h3>
+<p>The Sudoku class sets up the application and orchestrates the different parts of the game. It manages the main game loop, which includes event handling, screen refreshing, and framerate stabilization.</p>
+<p>Key functionalities include:</p>
+<ul>
+    <li>Initialization: The constructor initializes the Painter, MainMenu, Game, Loading, and Board objects, ensuring that all necessary resources and components are ready for the game to run.</li>
+    <li>Main Game Loop: The mainLoop() method contains the primary loop that keeps the game running. It handles:<ul>
+        <li>Event Handling: Uses SDL_PollEvent() to fetch events like keyboard presses, mouse clicks, and movement. If an SDL_QUIT event is detected, the loop exits.</li>
+        <li>View Management: Depending on the current view (MainMenu, Game, Loading), it delegates event handling to the appropriate module and updates the view accordingly.</li>
+        <li>Rendering: Calls the Painter::paint() method with the current view module to refresh the screen.</li>
+        <li>Framerate Stabilization: Measures the loop execution time and ensures a steady 60 FPS by introducing a delay if necessary.</li>
+    </ul>
+    </li>
+</ul>
+<p>The class ensures smooth transitions between different game states and maintains consistent performance, providing a cohesive and responsive user experience.</p>
+<h3 id="painter">Painter</h3>
+<p>The Painter class is responsible for setting up and managing the window, renderer, fonts, and textures for the game using SDL. It handles the initialization of the graphical environment and provides methods to render different game states.</p>
+<p>Key functionalities include:</p>
+<ul>
+    <li>Initialization: The constructor initializes the window, renderer, fonts, and textures, and sets a flag isSuccessfullyInitialized to indicate the success of the setup.</li>
+    <li>Resource Management: Methods such as createWindow(), createRenderer(), loadFonts(), and loadTextures() are responsible for creating and loading the necessary SDL resources.</li>
+    <li>Rendering: The paint(Paintable* paintable) method clears the screen, renders titles for different game states (main menu, game, loading), and calls the paint() method of the provided Paintable object to render its specific content.</li>
+</ul>
+<p>The class ensures efficient management of SDL resources using smart pointers and proper cleanup in the destructor. It provides a foundation for rendering the game&#39;s visual components and handling graphical updates.</p>
+<h3 id="game">Game</h3>
+<p>The Game class represents the main game logic and rendering for a board game using SDL for graphics. It extends the Paintable class and manages various elements such as number textures, fonts, and the game board itself.</p>
+<p>Key functionalities include:</p>
+<ul>
+    <li>Rendering: Methods like paint(), paintBoard(), paintNumbers(), and paintUI() handle the drawing of the game board, numbers, and UI elements.</li>
+    <li>Event Handling: The runEvent() method processes user inputs, including keyboard and mouse events, to interact with the game, such as moving the selected square or placing numbers.</li>
+    <li>Utilities: Helper methods like loadNumberTextures(), loadText(), and placeNumber() manage resources and game state changes.</li>
+    <li>Game State: The class tracks the selected square on the board and whether the game is won or paused.</li>
+</ul>
+<p>The class is constructed with SDL renderer and font pointers, ensuring it can draw and manage game elements efficiently.</p>
+<h3 id="mainmenu">MainMenu</h3>
+<p>The MainMenu class manages the main menu of the Sudoku game. It inherits from the Paintable class and uses SDL2 for rendering and event handling.</p>
+<p>Key Functionalities:</p>
+<ul>
+    <li>Initialization: Sets up textures for menu options (Play, Quit, difficulty levels) and checks for successful initialization.</li>
+    <li>Menu States and Options:<ul>
+        <li>MenuState: Represents the current state (MAIN_SCREEN, DIFFICULTY_LEVEL_SELECTION, PAUSE_MENU).</li>
+        <li>MenuOption: Represents the selected option (NONE, PLAY, QUIT, EASY, MEDIUM, HARD).</li>
+    </ul>
+    </li>
+    <li>Rendering: The paint() method renders the menu based on the current state and selected option.</li>
+    <li>Event Handling: The runEvent() method processes SDL events to handle mouse movements and clicks.</li>
+    <li>Mouse Position Handling: setMousePosition() updates the selected option based on the mouse position.</li>
+    <li>Click Handling: The click() method updates the state or selected difficulty level based on the selected option.</li>
+    <li>Text Loading: loadTexts() generates textures for menu text options.</li>
+</ul>
+<p>This class provides the functionality to navigate the main menu, select difficulty levels, and start the game.</p>
+<h3 id="loading">Loading</h3>
+<p>The Loading class handles the loading screen of the Sudoku game, displaying a loading message and an indicator while the game board is being generated. It inherits from the Paintable class and utilizes SDL2 for rendering and text generation.</p>
+<p>Key Functionalities:</p>
+<ul>
+    <li><p>Initialization and Cleanup:</p>
+        <ul>
+            <li>The constructor initializes textures for the loading text and indicator, and accepts shared pointers to SDL_Renderer, TTF_Font, and Board.</li>
+            <li>The destructor ensures proper cleanup of resources.</li>
+        </ul>
+    </li>
+    <li><p>Text Loading:</p>
+        <ul>
+            <li>loadTexts(): Generates textures for the loading text and indicator using Utilities::generateTextTexture(). Returns true if successful, false otherwise.</li>
+        </ul>
+    </li>
+    <li><p>Loading Status Check:</p>
+        <ul>
+            <li>checkLoading(): Checks if the board generation has ended by calling pBoard-&gt;hasBoardGenerationEnded().</li>
+            <li>Updates the loading indicator status every 500 milliseconds.</li>
+            <li>Returns ViewType::GAME if the board is ready, otherwise ViewType::LOADING.</li>
+        </ul>
+    </li>
+    <li>Rendering:<ul>
+        <li>paint(): Renders the loading text and indicator on the screen. The indicator&#39;s position is updated based on indicatorStatus.</li>
+    </ul>
+    </li>
+</ul>
+<h3 id="board">Board</h3>
+<p>The Board class manages a Sudoku game board, handling puzzle generation, solution validation, and user interactions. Key functionalities include:</p>
+<ul>
+    <li>Board Initialization: Represents a 9x9 grid of Square objects to store numbers and their types (user-input, program-generated).</li>
+    <li>Puzzle Generation: Utilizes backtracking algorithms and randomization to create Sudoku puzzles of varying difficulties (easy, medium, hard).</li>
+    <li>Puzzle Solving: Implements methods (solveBoardRandom() and solveBoardFast()) to recursively solve Sudoku puzzles.</li>
+    <li>Validation and Error Handling: Checks for rule violations (duplicate numbers in rows, columns, or 3x3 grids) and marks user-input errors.</li>
+    <li>Game State Management: Tracks board completion (isGameWon()), manages puzzle complexity levels, and ensures puzzle generation completion (hasBoardGenerationEnded()).</li>
+    <li>Concurrency: Uses std::thread for asynchronous board generation, allowing background puzzle creation while the game interface remains responsive.</li>
+</ul>
+<p>This class forms the backbone of Sudoku gameplay mechanics, ensuring puzzle generation, solving, and validation align with the game&#39;s rules and user interactions.</p>
+<h2 id="capabilities">Capabilities</h2>
+<p><img src="img_2.png" alt="img_2.png"></p>
+<p>Application Capabilities Overview
+    This Sudoku game application developed in C++ and SDL offers the following capabilities:</p>
+<ul>
+    <li><p>Interactive Gameplay: Users can solve Sudoku puzzles through intuitive mouse and keyboard interactions.</p>
+    </li>
+    <li><p>Multiple Difficulty Levels: Supports easy, medium, and hard difficulty levels with dynamically generated puzzles.</p>
+    </li>
+    <li><p>Real-time Feedback: Provides immediate feedback on user-entered numbers, highlighting errors in red.</p>
+    </li>
+    <li><p>Visual Clarity: Utilizes SDL for clear, visually appealing graphics and text rendering on the game board.</p>
+    </li>
+    <li><p>Loading Screen: Displays a loading screen with animated indicators while puzzles are generated in the background.</p>
+    </li>
+    <li><p>Concurrency: Implements multi-threading to ensure responsive gameplay and smooth transitions between screens.</p>
+    </li>
+    <li><p>Validation: Verifies the correctness of user solutions and alerts users to incorrect placements.</p>
+    </li>
+    <li><p>User-Friendly Interface: Features an intuitive interface with clear instructions and visual cues to aid gameplay.</p>
+    </li>
+    <li><p>Customizable Settings: Allows users to adjust settings such as sound, colors, and display preferences.</p>
+    </li>
+</ul>
+<p>This application aims to provide an engaging Sudoku-solving experience with robust functionalities and a polished user interface, enhancing user satisfaction and enjoyment.</p>
+<h2 id="main-development-problem">Main Development Problem</h2>
+<p>The main challenge was developing the board generation process for Sudoku. The primary strategy involved initially creating a full board randomly and then progressively removing numbers one by one, ensuring each step maintained a unique solution. However, the basic backtracking algorithm I implemented proved insufficient for generating very difficult boards with fewer than 30 numbers remaining.</p>
+<p>This method is highly randomized due to the random order of number removal. Consequently, while some hard boards can be generated in seconds, others may take significantly longer. To address this, I explored a more effective algorithm for solving Sudoku boards called Algorithm X, developed by Donald Knuth. This algorithm doesn&#39;t directly solve Sudoku but rather finds solutions to the exact cover problem. Sudoku puzzles can be translated into this problem format, requiring a &quot;dancing links&quot; matrix with 324 columns and 729 rows of boolean values interconnected in specific patterns. However, implementing this method posed challenges, especially regarding debugging, due to its complexity.</p>
+<p>To mitigate long board generation times, I implemented a secondary std::thread to handle puzzle generation separately, preventing application freezing. This thread continually updates the best-found board whenever a better solution is discovered. If the solution meets certain criteria, the main thread terminates the board generation process. Terminating this recursive function smoothly is tricky but currently functions without disrupting the player experience.</p>
+<p>Overall, while developing robust board generation remains challenging, the current approach effectively balances speed and complexity to provide a satisfactory Sudoku-solving experience.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Despite initial expectations, I am pleased with the outcome of this project. Along the way, I gained valuable insights into SDL2, C++, and the intricacies of Sudoku itself. A notable learning experience was integrating smart pointers into my project for the first time. I discovered their efficiency in memory management compared to traditional &#39;new&#39; and &#39;delete&#39; methods, offering simpler solutions and alleviating concerns about memory release. This approach also seamlessly integrates with SDL2, where dynamic memory allocation plays a crucial role in handling various aspects of the application.</p>
